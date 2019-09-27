@@ -1,0 +1,35 @@
+﻿<Window x:Class="WebApiTester.CreateBatch"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WebApiTester"
+      mc:Ignorable="d"
+      WindowStyle="ToolWindow"
+  
+
+      Title="CreateBatch" Height="565.334" Width="375.334">
+    <Grid Margin="0,0,-8,-2">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="0*"/>
+        </Grid.ColumnDefinitions>
+        <Label Content="Class Name" HorizontalAlignment="Left" Margin="50,52,0,0" VerticalAlignment="Top" Height="25" Width="85"/>
+        <TextBox x:Name ="ClassNameTextbox"  HorizontalAlignment="Left" Height="23" Margin="200,55,0,0" TextWrapping="Wrap" Text="Redaction" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Batch Name (optional)" HorizontalAlignment="Left" Margin="50,97,0,0" VerticalAlignment="Top" Height="25" Width="128"/>
+        <TextBox x:Name ="BatchNameTextbox" HorizontalAlignment="Left" Height="24" Margin="200,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="BatchNameTextbox_TextChanged"/>
+        <Label Content="Workflow" HorizontalAlignment="Left" Margin="50,142,0,0" VerticalAlignment="Top" Height="25" Width="114"/>
+        <TextBox x:Name ="WorkflowTextbox" HorizontalAlignment="Left" Height="22" Margin="200,145,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.744,0.424" />
+        <Label Content="Run ID (optional)" HorizontalAlignment="Left" Margin="50,187,0,0" VerticalAlignment="Top" Height="27" Width="102"/>
+        <TextBox x:Name ="RunIDTextbox" HorizontalAlignment="Left" Height="23" Margin="200,190,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name ="FilePathTextbox" HorizontalAlignment="Left" Height="60" Margin="200,235,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <Button Content="Attach Document" HorizontalAlignment="Left" Margin="50,240,0,0" VerticalAlignment="Top" Width="104" Click="ButtonBrowseClick" Height="20"/>
+        <Button Content="Create Batch" HorizontalAlignment="Left" Margin="109,393,0,0" VerticalAlignment="Top" Width="132" Click="Button_CreateBatch" Height="36"/>
+        <Label x:Name ="StatusLabel" Content="" HorizontalAlignment="Left" Margin="50,440,0,0" VerticalAlignment="Top" Width="266" Height="55"/>
+        <CheckBox x:Name ="FilePathCheckBox" Content="Send as file path" HorizontalAlignment="Left" Margin="50,272,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked"/>
+        <Label Content="Document Type (optional)" HorizontalAlignment="Left" Margin="50,324,0,0" VerticalAlignment="Top" Height="27" Width="150"/>
+        <TextBox x:Name ="DocTypeTextbox" HorizontalAlignment="Left" Height="23" Margin="200,327,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+
+    </Grid>
+
+</Window>

@@ -1,0 +1,39 @@
+﻿<Window x:Class="WebApiTester.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WebApiTester"
+        mc:Ignorable="d"
+        ResizeMode="CanMinimize"
+        Title="MainWindow" Height="544.667" Width="804.667">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="81*"/>
+            <ColumnDefinition Width="316*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="428" Margin="35,62,0,0" VerticalAlignment="Top" Width="730" Grid.ColumnSpan="2">
+            <TextBox x:Name ="RejectReasonTextbox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="169" Margin="137,302,0,0"/>
+        </Border>
+
+        <Button Content="Create Batch" HorizontalAlignment="Left" Margin="83,100,0,0" VerticalAlignment="Top" Width="100" Click="Button_CreateBatch" Grid.ColumnSpan="2"/>
+        <Button Content="Batch Status" HorizontalAlignment="Left" Margin="83,160,0,0" VerticalAlignment="Top" Width="100" Click="Button_BatchStatus" Grid.ColumnSpan="2"/>
+        <Button Content="Active Batches" HorizontalAlignment="Left" Margin="83,220,0,0" VerticalAlignment="Top" Width="100" Click="Button_ActiveBatch" Grid.ColumnSpan="2" RenderTransformOrigin="-6.693,-10.7"/>
+        <Button Content="Batch Collection" HorizontalAlignment="Left" Margin="83,280,0,0" VerticalAlignment="Top" Width="100" Click="Button_BatchCollection" Grid.ColumnSpan="2"/>
+        <Button Content="Cancel Batch" HorizontalAlignment="Left" Margin="83,340,0,0" VerticalAlignment="Top" Width="100" Click="Button_CancelBatch" Grid.ColumnSpan="2"/>
+        <TextBox x:Name ="BatchIDTextbox" HorizontalAlignment="Left" Height="23" Margin="190,97,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="367" Grid.Column="1"/>
+        <TextBox x:Name ="NoticeTextbox"  VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="288" Margin="190,137,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="374" Grid.Column="1"/>
+        <Label Content="BatchID" HorizontalAlignment="Left" Margin="112,94,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.075,0.109" Grid.Column="1"/>
+        <Label Content="Notice" HorizontalAlignment="Left" Margin="112,137,0,0" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="-0.807,0.449"/>
+        <Label Content="Reject Reason:" HorizontalAlignment="Left" Margin="83,365,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.807,0.449" Height="25" Width="88" Grid.ColumnSpan="2"/>
+        <Label Content="Input multiple batch IDs, separated by ','" HorizontalAlignment="Left" Margin="83,305,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.807,0.449" Height="25" Width="224" Grid.ColumnSpan="2"/>
+        <Label Content="Web API" HorizontalAlignment="Left" Margin="64,14,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.162,0.66"/>
+        <TextBox x:Name ="WebApiTextbox" HorizontalAlignment="Left" Height="23" Margin="144,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="495" TextChanged="WebApiTextbox_TextChanged" Grid.ColumnSpan="2"/>
+        <Button Content="Copy Notice" HorizontalAlignment="Left" Margin="337,448,0,0" VerticalAlignment="Top" Width="75" Click="Button_Copy" Grid.Column="1"/>
+        <Button Content="Test Connection" Grid.Column="1" HorizontalAlignment="Left" Margin="492,15,0,0" VerticalAlignment="Top" Width="90" Click="Button_TestConnect"/>
+
+
+
+    </Grid>
+</Window>
