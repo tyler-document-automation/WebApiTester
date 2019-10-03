@@ -16,7 +16,6 @@ namespace WebApiTester
     /// </summary>
     public partial class CreateBatch
     {
-        private static bool sendAsFilePath = false;
         private static string FilePath = "";
         public CreateBatch()
         {
@@ -58,12 +57,18 @@ namespace WebApiTester
             HttpClient client = new HttpClient();
             try
             {
-                if (FilePathCheckBox.IsChecked != null && FilePathCheckBox.IsChecked == true)
-                {
-                    sendAsFilePath = true;
-                }
-                var batchdoc = new BatchDocumentInfo(sendAsFilePath ? "" : Path.GetFileName(FilePath), sendAsFilePath ? FilePath : "", sendAsFilePath ? "" : FilePathTextbox.Text, DocTypeTextbox.Text);
+                var batchdoc = new BatchDocumentInfo((FilePathCheckBox.IsChecked != null && FilePathCheckBox.IsChecked == true) ? "" : Path.GetFileName(FilePath), (FilePathCheckBox.IsChecked != null && FilePathCheckBox.IsChecked == true) ? FilePath : "", (FilePathCheckBox.IsChecked != null && FilePathCheckBox.IsChecked == true) ? "" : FilePathTextbox.Text, DocTypeTextbox.Text);
+                int workflowId = 0;
 
+                if (!string.IsNullOrWhiteSpace(WorkflowTextbox.Text))
+                {
+                    bool canConvert = int.TryParse(WorkflowTextbox.Text, out workflowId);
+                    if (!canConvert)
+                    {
+                        StatusLabel.Content = "The input workflowID is not a valid integer.";
+                        return;
+                    }
+                }
                 var batchDocs = new List<BatchDocumentInfo>{batchdoc}.ToArray();
                 string url = ((MainWindow)Application.Current.MainWindow).WebApiTextbox.Text;
                 BatchCreateInfo batchCreateInfo = new BatchCreateInfo(

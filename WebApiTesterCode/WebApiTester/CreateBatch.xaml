@@ -15,11 +15,11 @@
             <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
         <Label Content="Class Name" HorizontalAlignment="Left" Margin="50,52,0,0" VerticalAlignment="Top" Height="25" Width="85"/>
-        <TextBox x:Name ="ClassNameTextbox"  HorizontalAlignment="Left" Height="23" Margin="200,55,0,0" TextWrapping="Wrap" Text="Redaction" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name ="ClassNameTextbox"  HorizontalAlignment="Left" Height="23" Margin="200,55,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
         <Label Content="Batch Name (optional)" HorizontalAlignment="Left" Margin="50,97,0,0" VerticalAlignment="Top" Height="25" Width="128"/>
         <TextBox x:Name ="BatchNameTextbox" HorizontalAlignment="Left" Height="24" Margin="200,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="BatchNameTextbox_TextChanged"/>
         <Label Content="Workflow" HorizontalAlignment="Left" Margin="50,142,0,0" VerticalAlignment="Top" Height="25" Width="114"/>
-        <TextBox x:Name ="WorkflowTextbox" HorizontalAlignment="Left" Height="22" Margin="200,145,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.744,0.424" />
+        <TextBox x:Name ="WorkflowTextbox" HorizontalAlignment="Left" Height="22" Margin="200,145,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.744,0.424" />
         <Label Content="Run ID (optional)" HorizontalAlignment="Left" Margin="50,187,0,0" VerticalAlignment="Top" Height="27" Width="102"/>
         <TextBox x:Name ="RunIDTextbox" HorizontalAlignment="Left" Height="23" Margin="200,190,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name ="FilePathTextbox" HorizontalAlignment="Left" Height="60" Margin="200,235,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
