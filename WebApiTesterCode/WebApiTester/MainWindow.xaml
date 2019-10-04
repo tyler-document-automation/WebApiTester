@@ -38,8 +38,10 @@
         <Button Content="Test Connection" HorizontalAlignment="Left" Margin="735,15,0,0" VerticalAlignment="Top" Width="90" Click="Button_TestConnect" Height="20"/>
         <Button Content="Release Documents" HorizontalAlignment="Left" Margin="83,285,0,0" VerticalAlignment="Top" Width="109" Click="Button_ReleaseData" Height="20"/>
         <TextBox x:Name ="IntellidactIDTextbox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="162" Margin="191,341,0,0"/>
-        <CheckBox x:Name ="IncludeOcrCheckBox" Content="Include OCR" HorizontalAlignment="Left" Margin="82,321,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.587,-1.044"/>
-        <CheckBox x:Name ="SavePackageCheckBox" Content="Download Package" HorizontalAlignment="Left" Margin="199,321,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.587,-1.044"/>
+        <CheckBox x:Name ="IncludeOrgCheckBox" Content="Include Original" HorizontalAlignment="Left" Margin="59,321,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.587,-1.044"/>
+        <CheckBox x:Name ="IncludeOcrCheckBox" Content="Include OCR" HorizontalAlignment="Left" Margin="168,321,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.587,-1.044"/>
+
+        <CheckBox x:Name ="SavePackageCheckBox" Content="Download Package" HorizontalAlignment="Left" Margin="262,321,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.587,-1.044"/>
 
 
 

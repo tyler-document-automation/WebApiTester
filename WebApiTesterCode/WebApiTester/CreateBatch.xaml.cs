@@ -103,7 +103,7 @@ namespace WebApiTester
                 }
                 else
                 {
-                    StatusLabel.Content = $"Failed to create the batch {batchCreateInfo.name}";
+                    StatusLabel.Content = $"Failed to create the batch {batchCreateInfo.name}. \nSee main windows for detailed error message.";
                     ((MainWindow) Application.Current.MainWindow).BatchIDTextbox.Text = "";
 
                     try

@@ -246,6 +246,7 @@ namespace WebApiTester
                 NoticeTextbox.Text = "The input BatchID is not a valid integer.";
                 return;
             }
+            var includeOrg = IncludeOrgCheckBox.IsChecked == true;  // If set to be true, include original file
 
             var includeOcr = IncludeOcrCheckBox.IsChecked == true;  // If set to be true, include Ocr information
             var stream = SavePackageCheckBox.IsChecked == true;       // if stream is set to true, you will save the package as a zipped file. Otherwise, display filepath only.
@@ -256,7 +257,7 @@ namespace WebApiTester
             SetupWebClient(url, false, false);
             try
             {
-                HttpResponseMessage response = await client.GetAsync($"api/Batch/Release/{batchID}?IncludeOCR={includeOcr}&stream={stream}&intellidactId={intellidactId}");
+                HttpResponseMessage response = await client.GetAsync($"api/Batch/Release/{batchID}?IncludeOriginal={includeOrg}&IncludeOCR={includeOcr}&stream={stream}&intellidactId={intellidactId}");
                 result = await response.Content.ReadAsStringAsync();
                 if (response.IsSuccessStatusCode)
                 {
