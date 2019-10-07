@@ -16,11 +16,13 @@ namespace WebApiTester
     /// </summary>
     public partial class CreateBatch
     {
-        private static string FilePath = "";
+        //private static string FilePath = "";
+        private static List<BatchDocumentInfo> batchDocsList = new List<BatchDocumentInfo>();
+        private static int sequence = 1;
         public CreateBatch()
         {
             InitializeComponent();
-
+            DocumentsTextbox.Text = "Attached Documents: ";
         }
 
         private void ButtonBrowseClick(object sender, RoutedEventArgs e)
@@ -38,15 +40,21 @@ namespace WebApiTester
                 // Open document 
                 if (FilePathCheckBox.IsChecked == true)
                 {
-                    FilePath = dlg.FileName;
-                    FilePathTextbox.Text = dlg.FileName;
+                    var filePath = dlg.FileName;
+                    var fileName = Path.GetFileName(filePath);
+                    batchDocsList.Add(new BatchDocumentInfo(fileName, filePath, null, String.IsNullOrWhiteSpace(DocTypeTextbox.Text) ? null : DocTypeTextbox.Text));
+                    DocumentsTextbox.Text += $"\n{sequence}. {fileName}";
+                    sequence++;
                 }
                 else
                 {
-                    FilePath = dlg.FileName;
+                    var filePath = dlg.FileName;
+                    var fileName = Path.GetFileName(filePath);
                     byte[] bytes = File.ReadAllBytes(dlg.FileName);
-                    FilePathTextbox.Text = Convert.ToBase64String(bytes);
-
+                    var data = Convert.ToBase64String(bytes);
+                    batchDocsList.Add(new BatchDocumentInfo(fileName, null, data, String.IsNullOrWhiteSpace(DocTypeTextbox.Text) ? null : DocTypeTextbox.Text));
+                    DocumentsTextbox.Text += $"\n{sequence}. {fileName}";
+                    sequence++;
                 }
 
             }
@@ -57,7 +65,7 @@ namespace WebApiTester
             HttpClient client = new HttpClient();
             try
             {
-                var batchdoc = new BatchDocumentInfo((FilePathCheckBox.IsChecked != null && FilePathCheckBox.IsChecked == true) ? "" : Path.GetFileName(FilePath), (FilePathCheckBox.IsChecked != null && FilePathCheckBox.IsChecked == true) ? FilePath : "", (FilePathCheckBox.IsChecked != null && FilePathCheckBox.IsChecked == true) ? "" : FilePathTextbox.Text, DocTypeTextbox.Text);
+                //var batchdoc = new BatchDocumentInfo((FilePathCheckBox.IsChecked != null && FilePathCheckBox.IsChecked == true) ? "" : Path.GetFileName(FilePath), (FilePathCheckBox.IsChecked != null && FilePathCheckBox.IsChecked == true) ? FilePath : "", (FilePathCheckBox.IsChecked != null && FilePathCheckBox.IsChecked == true) ? "" : FilePathTextbox.Text, DocTypeTextbox.Text);
                 int workflowId = 0;
 
                 if (!string.IsNullOrWhiteSpace(WorkflowTextbox.Text))
@@ -69,7 +77,9 @@ namespace WebApiTester
                         return;
                     }
                 }
-                var batchDocs = new List<BatchDocumentInfo>{batchdoc}.ToArray();
+                //var batchDocs = new List<BatchDocumentInfo>{batchdoc}.ToArray();
+
+                var batchDocs = batchDocsList.ToArray();
                 string url = ((MainWindow)Application.Current.MainWindow).WebApiTextbox.Text;
                 BatchCreateInfo batchCreateInfo = new BatchCreateInfo(
                     ClassNameTextbox.Text,
@@ -78,7 +88,6 @@ namespace WebApiTester
                     RunIDTextbox.Text,
                     batchDocs
                 );
-
                 StatusLabel.Content = "Creating Batch...";
                 client.BaseAddress = new Uri(url);
                 client.DefaultRequestHeaders.Accept.Clear();
@@ -132,6 +141,13 @@ namespace WebApiTester
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void ButtonClearAllDocs(object sender, RoutedEventArgs e)
+        {
+            DocumentsTextbox.Text = "Attached Documents: ";
+            sequence = 1;
+            batchDocsList = new List<BatchDocumentInfo>();
         }
     }
 }
