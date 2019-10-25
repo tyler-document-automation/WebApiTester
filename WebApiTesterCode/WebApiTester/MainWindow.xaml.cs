@@ -30,7 +30,11 @@ namespace WebApiTester
             
         }
 
+<<<<<<< HEAD
         public async void SetupWebClient(string url, bool showOkStatus, bool getWithBody)
+=======
+        private async void SetupWebClient(string url, bool showOkStatus, bool getWithBody)
+>>>>>>> f0fd3c20693e9ed9f732fd6242749658cfaccad9
         {
             if (getWithBody)
             {
@@ -44,8 +48,11 @@ namespace WebApiTester
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
+<<<<<<< HEAD
             client.DefaultRequestHeaders.TryAddWithoutValidation("api_key", ((MainWindow)Application.Current.MainWindow).ApiKeyTextbox.Text);
 
+=======
+>>>>>>> f0fd3c20693e9ed9f732fd6242749658cfaccad9
             if (!showOkStatus) return;
             try
             {
@@ -70,7 +77,11 @@ namespace WebApiTester
         {
             var Page2 = new CreateBatch(); //create your new form.
             Page2.ShowDialog(); //show the new form.
+<<<<<<< HEAD
             Page2.Close();
+=======
+           // Page2.Close();
+>>>>>>> f0fd3c20693e9ed9f732fd6242749658cfaccad9
         }
 
         /// <summary>
@@ -80,6 +91,7 @@ namespace WebApiTester
         /// <param name="e"></param>
         private async void Button_RetrieveBatch(object sender, RoutedEventArgs e)
         {
+<<<<<<< HEAD
             using (new WaitCursor())
             {
                 int batchID = 0;
@@ -169,11 +181,43 @@ namespace WebApiTester
                     NoticeTextbox.Text = $"Error: {ex.Message}. \nPlease double check url, api Key and parameters";
                 }
             }
+=======
+            int batchID = 0;
+            bool canConvert = int.TryParse(BatchIDTextbox.Text, out batchID);
+            if (!canConvert)
+            {
+                NoticeTextbox.Text = "The input BatchID is not a valid integer.";
+                return;
+            }
+
+            string result = "";
+
+            string url = ((MainWindow)Application.Current.MainWindow).WebApiTextbox.Text;
+            SetupWebClient(url, false, false);
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync($"api/Batch/Retrieve/{batchID}");
+                result = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    NoticeTextbox.Text = JValue.Parse(result).ToString(Formatting.Indented);
+                }
+                else
+                {
+                    NoticeTextbox.Text = response.ReasonPhrase + "\n" + result;
+                }
+            }
+            catch (Exception ex)
+            {
+                NoticeTextbox.Text = $"Error: {ex.Message}. \nPlease double check url and parameters";
+            }
+>>>>>>> f0fd3c20693e9ed9f732fd6242749658cfaccad9
         }
 
 
         private async void Button_BatchStatus(object sender, RoutedEventArgs e)
         {
+<<<<<<< HEAD
             using (new WaitCursor())
             {
                 string result = "";
@@ -239,11 +283,76 @@ namespace WebApiTester
                     NoticeTextbox.Text = $"Error: {ex.Message}. \nPlease double check url, api Key and parameters";
                 }
             }
+=======
+            
+            string result = "";
+            List<int> batchIdList = new List<int>();
+
+            string[] stringBatchIds = BatchIDTextbox.Text.Split(',');
+
+            foreach (var stringBatchId in stringBatchIds)
+            {
+                if (string.IsNullOrWhiteSpace(stringBatchId)) continue;
+                int batchID = 0;
+                bool canConvert = int.TryParse(stringBatchId, out batchID);
+                if (!canConvert)
+                {
+                    NoticeTextbox.Text = "The input BatchID array contains one or more invalid integers.";
+                    return;
+                }
+                batchIdList.Add(batchID);
+            }
+
+            string workflow = WorkflowTextbox.Text;
+            string state = StateTextbox.Text;
+            
+            //string batchIdParams = JsonConvert.SerializeObject(intBatchIds);
+            int workflowId = 0;
+
+            if (!string.IsNullOrWhiteSpace(workflow))
+            {
+                bool canConvert = int.TryParse(WorkflowTextbox.Text, out workflowId);
+                if (!canConvert)
+                {
+                    NoticeTextbox.Text = "The input workflowID is not a valid integer.";
+                    return;
+                }
+            }
+
+            string url = ((MainWindow)Application.Current.MainWindow).WebApiTextbox.Text;
+            var batchIdUrl = "";
+            foreach (var batchId in batchIdList)
+            {
+                batchIdUrl += $"&batchIds={batchId}";
+            }
+            
+            SetupWebClient(url, false, false);
+
+            try
+            {
+                var requestUrl = $"api/Batch/Status?workflowId={workflowId}&state={state}" + batchIdUrl;
+                HttpResponseMessage response = await client.GetAsync(requestUrl);
+                result = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    NoticeTextbox.Text = JValue.Parse(result).ToString(Formatting.Indented);
+                }
+                else
+                {
+                    NoticeTextbox.Text = response.ReasonPhrase + "\n" + result;
+                }
+            }
+            catch (Exception ex)
+            {
+                NoticeTextbox.Text = $"Error: {ex.Message}. \nPlease double check url and parameters";
+            }
+>>>>>>> f0fd3c20693e9ed9f732fd6242749658cfaccad9
         }
 
 
         private async void Button_CancelBatch(object sender, RoutedEventArgs e)
         {
+<<<<<<< HEAD
             using (new WaitCursor())
             {
                 int batchID = 0;
@@ -280,6 +389,41 @@ namespace WebApiTester
                     NoticeTextbox.Text = $"Error: {ex.Message}. \nPlease double check url, api Key and parameters";
                 }
             }
+=======
+            int batchID = 0;
+            bool canConvert = int.TryParse(BatchIDTextbox.Text, out batchID);
+            if (!canConvert)
+            {
+                NoticeTextbox.Text = "The input BatchID is not a valid integer.";
+                return;
+            }
+
+            string result = "";
+
+            string url = ((MainWindow)Application.Current.MainWindow).WebApiTextbox.Text;
+            SetupWebClient(url, false, false);
+            try
+            {
+                var param = JsonConvert.SerializeObject(new {rejectReason = RejectReasonTextbox.Text});
+                HttpContent contentPost = new StringContent(param, Encoding.UTF8, "application/json");
+
+
+                HttpResponseMessage response = await client.PostAsync($"api/Batch/Cancel/{batchID}", contentPost);
+                result = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    NoticeTextbox.Text = JValue.Parse(result).ToString(Formatting.Indented);
+                }
+                else
+                {
+                    NoticeTextbox.Text = response.ReasonPhrase + "\n" + result;
+                }
+            }
+            catch (Exception ex)
+            {
+                NoticeTextbox.Text = $"Error: {ex.Message}. \nPlease double check url and parameters";
+            }
+>>>>>>> f0fd3c20693e9ed9f732fd6242749658cfaccad9
         }
 
         private void WebApiTextbox_TextChanged(object sender, TextChangedEventArgs e)
@@ -300,6 +444,7 @@ namespace WebApiTester
             SetupWebClient(WebApiTextbox.Text, true, false);
         }
 
+<<<<<<< HEAD
 
         private async void Button_ArchiveBatch(object sender, RoutedEventArgs e)
         {
@@ -344,6 +489,98 @@ namespace WebApiTester
             IncludeOcrCheckBox.IsChecked = false;
             IncludeOrgCheckBox.IsChecked = false;
             SavePackageCheckBox.IsChecked = false;
+=======
+        /// <summary>
+        /// Batch Status call
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void Button_ReleaseData(object sender, RoutedEventArgs e)
+        {
+            int batchID = 0;
+            bool canConvert = int.TryParse(BatchIDTextbox.Text, out batchID);
+            if (!canConvert)
+            {
+                NoticeTextbox.Text = "The input BatchID is not a valid integer.";
+                return;
+            }
+            var includeOrg = IncludeOrgCheckBox.IsChecked == true;  // If set to be true, include original file
+
+            var includeOcr = IncludeOcrCheckBox.IsChecked == true;  // If set to be true, include Ocr information
+            var stream = SavePackageCheckBox.IsChecked == true;       // if stream is set to true, you will save the package as a zipped file. Otherwise, display filepath only.
+
+            string result = "";
+            string intellidactId = IntellidactIDTextbox.Text;
+            string url = ((MainWindow)Application.Current.MainWindow).WebApiTextbox.Text;
+            SetupWebClient(url, false, false);
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync($"api/Batch/Release/{batchID}?IncludeOriginal={includeOrg}&IncludeOCR={includeOcr}&stream={stream}&intellidactId={intellidactId}");
+                result = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    
+                        var body = JObject.Parse(result);
+                    if (stream)
+                    {
+                        var package = body["package"];
+                        byte[] zippedPackage = Convert.FromBase64String(package.ToString());
+                        string path = Path.GetTempPath();
+                        File.WriteAllBytes(@path + $"\\Batch_{batchID}_Release_Package.zip", zippedPackage);
+                        FileInfo file = new FileInfo(@path + $"\\Batch_{batchID}_Release_Package.zip");
+
+                        NoticeTextbox.Text = "The zipped release package is saved to the local machine" + $"\nZip file path: \n{file.FullName}\n\n" + "Documents:\n"+body["documents"].ToString(Formatting.Indented);
+                    }
+                    else
+                    {
+                        NoticeTextbox.Text = body["documents"].ToString(Formatting.Indented);
+                    }
+                }
+                else
+                {
+                    NoticeTextbox.Text = response.ReasonPhrase + "\n" + result;
+                }
+            }
+            catch (Exception ex)
+            {
+                NoticeTextbox.Text = $"Error: {ex.Message}. \nPlease double check url and parameters";
+            }
+        }
+
+        private async void Button_ArchiveBatch(object sender, RoutedEventArgs e)
+        {
+            int batchID = 0;
+            bool canConvert = int.TryParse(BatchIDTextbox.Text, out batchID);
+            if (!canConvert)
+            {
+                NoticeTextbox.Text = "The input BatchID is not a valid integer.";
+                return;
+            }
+
+            string result = "";
+
+            string url = ((MainWindow)Application.Current.MainWindow).WebApiTextbox.Text;
+            SetupWebClient(url, false, false);
+            try
+            {
+                var param = JsonConvert.SerializeObject(new { rejectReason = RejectReasonTextbox.Text });
+
+                HttpResponseMessage response = await client.PostAsync($"api/Batch/Archive/{batchID}", null);
+                result = await response.Content.ReadAsStringAsync();
+                if (response.IsSuccessStatusCode)
+                {
+                    NoticeTextbox.Text = JValue.Parse(result).ToString(Formatting.Indented);
+                }
+                else
+                {
+                    NoticeTextbox.Text = response.ReasonPhrase + "\n" + result;
+                }
+            }
+            catch (Exception ex)
+            {
+                NoticeTextbox.Text = $"Error: {ex.Message}. \nPlease double check url and parameters";
+            }
+>>>>>>> f0fd3c20693e9ed9f732fd6242749658cfaccad9
         }
     }
 
