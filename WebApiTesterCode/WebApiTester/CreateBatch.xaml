@@ -6,19 +6,13 @@
       xmlns:local="clr-namespace:WebApiTester"
       mc:Ignorable="d"
       ResizeMode="CanMinimize"
-<<<<<<< HEAD
       Title="CreateBatch" Height="615.334" Width="441.501">
     <Grid Margin="10,0,4,-6">
-=======
-      Title="CreateBatch" Height="611.334" Width="379.334">
-    <Grid Margin="0,0,2,0">
->>>>>>> f0fd3c20693e9ed9f732fd6242749658cfaccad9
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
 
-<<<<<<< HEAD
         <Rectangle Fill="#FFF4F4F5" Stroke="Black" Margin="11,236,0,125" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="391">
             <Rectangle.RenderTransform>
                 <TransformGroup>
@@ -45,24 +39,6 @@
         <ComboBox x:Name ="WorkflowComboBox" Text ="--Select Workflow--" IsEditable="True" IsReadOnly="True" HorizontalAlignment="Left" Margin="200,145,0,0" VerticalAlignment="Top" Width="146"/>
         <ComboBox x:Name ="BatchClassComboBox" Text ="--Select Batch Class--" IsEditable="True" IsReadOnly="True"  HorizontalAlignment="Left" Margin="200,55,0,0" VerticalAlignment="Top" Width="146" SelectionChanged="BatchClassComboBox_SelectionChanged"/>
         <ComboBox x:Name ="DocTypeComboBox" Text ="Document Type" IsEditable="True" IsReadOnly="True" HorizontalAlignment="Left" Margin="20,249,0,0" VerticalAlignment="Top" Width="108" SelectedValue ="{Binding selectedType}"  ItemsSource="{Binding docTypes}" SelectionChanged="DocTypeComboBox_SelectionChanged" RenderTransformOrigin="0.787,0.795"/>
-=======
-        <Label Content="Class Name" HorizontalAlignment="Left" Margin="50,52,0,0" VerticalAlignment="Top" Height="25" Width="85"/>
-        <TextBox x:Name ="ClassNameTextbox"  HorizontalAlignment="Left" Height="23" Margin="200,55,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Batch Name (optional)" HorizontalAlignment="Left" Margin="50,97,0,0" VerticalAlignment="Top" Height="25" Width="128"/>
-        <TextBox x:Name ="BatchNameTextbox" HorizontalAlignment="Left" Height="24" Margin="200,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" TextChanged="BatchNameTextbox_TextChanged"/>
-        <Label Content="Workflow" HorizontalAlignment="Left" Margin="50,142,0,0" VerticalAlignment="Top" Height="25" Width="114"/>
-        <TextBox x:Name ="WorkflowTextbox" HorizontalAlignment="Left" Height="22" Margin="200,145,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" RenderTransformOrigin="0.744,0.424" />
-        <Label Content="Run ID (optional)" HorizontalAlignment="Left" Margin="50,187,0,0" VerticalAlignment="Top" Height="27" Width="102"/>
-        <TextBox x:Name ="RunIDTextbox" HorizontalAlignment="Left" Height="23" Margin="200,190,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name ="DocumentsTextbox" IsReadOnly="True" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="119" Margin="50,304,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="285"/>
-        <Button Content="Attach Document" HorizontalAlignment="Left" Margin="50,240,0,0" VerticalAlignment="Top" Width="104" Click="ButtonBrowseClick" Height="20"/>
-        <Button Content="Create Batch" HorizontalAlignment="Left" Margin="104,467,0,0" VerticalAlignment="Top" Width="132" Click="Button_CreateBatch" Height="36"/>
-        <Label x:Name ="StatusLabel" Content="" HorizontalAlignment="Left" Margin="50,509,0,0" VerticalAlignment="Top" Width="266" Height="55"/>
-        <CheckBox x:Name ="FilePathCheckBox" Content="Send as file path" HorizontalAlignment="Left" Margin="200,243,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked"/>
-        <Label Content="Document Type (optional)" HorizontalAlignment="Left" Margin="50,268,0,0" VerticalAlignment="Top" Height="27" Width="150"/>
-        <TextBox x:Name ="DocTypeTextbox" HorizontalAlignment="Left" Height="23" Margin="200,272,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <Button Content="Clear All Documents" HorizontalAlignment="Left" Margin="208,428,0,0" VerticalAlignment="Top" Width="118" Click="ButtonClearAllDocs" Height="20"/>
->>>>>>> f0fd3c20693e9ed9f732fd6242749658cfaccad9
 
     </Grid>
 
