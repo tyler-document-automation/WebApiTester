@@ -11,6 +11,7 @@
         /// <param name="workflowId"></param>
         /// <param name="runId"></param>
         /// <param name="documents"></param>
+        /// <param name="filerData"></param>
         public BatchCreateInfo(string className, string name, int workflowId, string runId, BatchDocumentInfo[] documents)
         {
             this.className = className;
@@ -46,6 +47,8 @@
         /// runID, the file drop folder to run different experiments 
         /// </summary>
         public string runId { get; set; }
+
+        
         #endregion
     }
 }

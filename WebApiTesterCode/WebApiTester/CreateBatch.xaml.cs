@@ -25,6 +25,7 @@ namespace WebApiTester
         private static string docType;
         public static string selectedType = "--Document Type--";
         public static List<string> docTypes;
+        public int uploadDocCount;
 
         public CreateBatch()
         {
@@ -117,7 +118,8 @@ namespace WebApiTester
             // Process open file dialog box results
             if (result == true)
             {
-                
+                uploadDocCount = dlg.FileNames.Length;
+
                 //if (string.IsNullOrWhiteSpace(docType)) docType = BatchClassComboBox.SelectionBoxItem.ToString();
                 // Open document 
                 if (FilePathCheckBox.IsChecked == true)
@@ -126,7 +128,7 @@ namespace WebApiTester
                     {
                         var fileName = Path.GetFileName(filePath);
                         batchDocsList.Add(new BatchDocumentInfo(fileName, filePath, null,
-                            String.IsNullOrWhiteSpace(docType) ? null : docType));
+                            String.IsNullOrWhiteSpace(docType) ? null : docType, null));
                         DocumentsTextbox.Text += $"\n{sequence}. {docType} -> {fileName} -> filePath";
                         sequence++;
                     }
@@ -139,11 +141,39 @@ namespace WebApiTester
                         byte[] bytes = File.ReadAllBytes(dlg.FileName);
                         var data = Convert.ToBase64String(bytes);
                         batchDocsList.Add(new BatchDocumentInfo(fileName, null, data,
-                            String.IsNullOrWhiteSpace(docType) ? null : docType));
+                            String.IsNullOrWhiteSpace(docType) ? null : docType, null));
                         DocumentsTextbox.Text += $"\n{sequence}. {docType} -> {fileName} -> dataStream";
                         sequence++;
                     }
                 }
+
+            }
+        }
+
+        private void ButtonFilerDataClick(object sender, RoutedEventArgs e)
+        {
+            var dlg = new OpenFileDialog
+            {
+                Filter = "Json Files (*.json, *.txt)|*.json;*.txt|All Files|*.*",
+                Multiselect = false
+            };
+
+            // Show open file dialog box
+            var result = dlg.ShowDialog();
+            // Process open file dialog box results
+            if (result == true)
+            {
+                var filePath = dlg.FileName;
+                DocumentsTextbox.Text += "-> filerData ";
+                string json = "";
+                using (StreamReader r = new StreamReader(filePath))
+                {
+                    json = r.ReadToEnd();
+                }
+
+                DocumentsTextbox.Text += filePath;
+                
+                batchDocsList.Last().filerData = json;
 
             }
         }
@@ -178,6 +208,7 @@ namespace WebApiTester
                         workflowId,
                         RunIDTextbox.Text,
                         batchDocs.Length == 0 ? null : batchDocs
+                        
                     );
 
                     StatusLabel.Content = "Creating Batch...";

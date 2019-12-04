@@ -6,14 +6,14 @@
       xmlns:local="clr-namespace:WebApiTester"
       mc:Ignorable="d"
       ResizeMode="CanMinimize"
-      Title="CreateBatch" Height="615.334" Width="441.501">
+      Title="CreateBatch" Height="615.334" Width="517.768">
     <Grid Margin="10,0,4,-6">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
 
-        <Rectangle Fill="#FFF4F4F5" Stroke="Black" Margin="11,236,0,125" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="391">
+        <Rectangle Fill="#FFF4F4F5" Stroke="Black" Margin="11,236,0,124.6" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Left" Width="474">
             <Rectangle.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -24,21 +24,22 @@
             </Rectangle.RenderTransform>
         </Rectangle>
 
-        <Label Content="Class Name" HorizontalAlignment="Left" Margin="50,52,0,0" VerticalAlignment="Top" Height="25" Width="85"/>
-        <Label Content="Batch Name (optional)" HorizontalAlignment="Left" Margin="50,97,0,0" VerticalAlignment="Top" Height="25" Width="128"/>
-        <TextBox x:Name ="BatchNameTextbox" HorizontalAlignment="Left" Height="24" Margin="200,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" TextChanged="BatchNameTextbox_TextChanged"/>
-        <Label Content="Workflow" HorizontalAlignment="Left" Margin="50,142,0,0" VerticalAlignment="Top" Height="25" Width="114"/>
-        <Label Content="Run ID (optional)" HorizontalAlignment="Left" Margin="50,187,0,0" VerticalAlignment="Top" Height="27" Width="102"/>
-        <TextBox x:Name ="RunIDTextbox" HorizontalAlignment="Left" Height="23" Margin="200,190,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="146"/>
-        <TextBox x:Name ="DocumentsTextbox" IsReadOnly="True" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="141" Margin="20,278,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="369"/>
-        <Button Content="Attach Document" HorizontalAlignment="Left" Margin="158,249,0,0" VerticalAlignment="Top" Width="104" Click="ButtonBrowseClick" Height="20" RenderTransformOrigin="0.668,0.425"/>
-        <Button Content="Create Batch" HorizontalAlignment="Left" Margin="138,472,0,0" VerticalAlignment="Top" Width="132" Click="Button_CreateBatch" Height="36"/>
-        <Label x:Name ="StatusLabel" Content="" HorizontalAlignment="Left" Margin="29,513,0,0" VerticalAlignment="Top" Width="369" Height="69"/>
-        <CheckBox x:Name ="FilePathCheckBox" Content="send as file path" HorizontalAlignment="Left" Margin="290,252,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked" Width="108"/>
-        <Button Content="Clear All Documents" HorizontalAlignment="Left" Margin="271,428,0,0" VerticalAlignment="Top" Width="118" Click="ButtonClearAllDocs" Height="20"/>
-        <ComboBox x:Name ="WorkflowComboBox" Text ="--Select Workflow--" IsEditable="True" IsReadOnly="True" HorizontalAlignment="Left" Margin="200,145,0,0" VerticalAlignment="Top" Width="146"/>
-        <ComboBox x:Name ="BatchClassComboBox" Text ="--Select Batch Class--" IsEditable="True" IsReadOnly="True"  HorizontalAlignment="Left" Margin="200,55,0,0" VerticalAlignment="Top" Width="146" SelectionChanged="BatchClassComboBox_SelectionChanged"/>
-        <ComboBox x:Name ="DocTypeComboBox" Text ="Document Type" IsEditable="True" IsReadOnly="True" HorizontalAlignment="Left" Margin="20,249,0,0" VerticalAlignment="Top" Width="108" SelectedValue ="{Binding selectedType}"  ItemsSource="{Binding docTypes}" SelectionChanged="DocTypeComboBox_SelectionChanged" RenderTransformOrigin="0.787,0.795"/>
+        <Label Content="Class Name" HorizontalAlignment="Left" Margin="70,52,0,0" VerticalAlignment="Top" Height="25" Width="85"/>
+        <Label Content="Batch Name (optional)" HorizontalAlignment="Left" Margin="70,97,0,0" VerticalAlignment="Top" Height="25" Width="128"/>
+        <TextBox x:Name ="BatchNameTextbox" HorizontalAlignment="Left" Height="24" Margin="244,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" TextChanged="BatchNameTextbox_TextChanged"/>
+        <Label Content="Workflow" HorizontalAlignment="Left" Margin="70,142,0,0" VerticalAlignment="Top" Height="25" Width="114"/>
+        <Label Content="Run ID (optional)" HorizontalAlignment="Left" Margin="70,187,0,0" VerticalAlignment="Top" Height="27" Width="102"/>
+        <TextBox x:Name ="RunIDTextbox" HorizontalAlignment="Left" Height="23" Margin="244,190,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="146"/>
+        <TextBox x:Name ="DocumentsTextbox" IsReadOnly="True" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="141" Margin="20,278,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="448"/>
+        <Button Content="Attach Document" HorizontalAlignment="Left" Margin="140,248,0,0" VerticalAlignment="Top" Width="104" Click="ButtonBrowseClick" Height="20" RenderTransformOrigin="0.668,0.425"/>
+        <Button Content="Create Batch" HorizontalAlignment="Left" Margin="164,472,0,0" VerticalAlignment="Top" Width="132" Click="Button_CreateBatch" Height="36"/>
+        <Label x:Name ="StatusLabel" Content="" HorizontalAlignment="Left" Margin="55,513,0,0" VerticalAlignment="Top" Width="369" Height="69"/>
+        <CheckBox x:Name ="FilePathCheckBox" Content="send as file path" HorizontalAlignment="Left" Margin="372,252,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked" Width="108"/>
+        <Button Content="Clear All Documents" HorizontalAlignment="Left" Margin="339,433,0,0" VerticalAlignment="Top" Width="118" Click="ButtonClearAllDocs" Height="20"/>
+        <ComboBox x:Name ="WorkflowComboBox" Text ="--Select Workflow--" IsEditable="True" IsReadOnly="True" HorizontalAlignment="Left" Margin="244,145,0,0" VerticalAlignment="Top" Width="146"/>
+        <ComboBox x:Name ="BatchClassComboBox" Text ="--Select Batch Class--" IsEditable="True" IsReadOnly="True"  HorizontalAlignment="Left" Margin="244,55,0,0" VerticalAlignment="Top" Width="146" SelectionChanged="BatchClassComboBox_SelectionChanged"/>
+        <ComboBox x:Name ="DocTypeComboBox" Text ="Document Type" IsEditable="True" IsReadOnly="True" HorizontalAlignment="Left" Margin="20,247,0,0" VerticalAlignment="Top" Width="108" SelectedValue ="{Binding selectedType}"  ItemsSource="{Binding docTypes}" SelectionChanged="DocTypeComboBox_SelectionChanged" RenderTransformOrigin="0.787,0.795"/>
+        <Button Content="Upload FilerData" HorizontalAlignment="Left" Margin="258,248,0,0" VerticalAlignment="Top" Width="104" Click="ButtonFilerDataClick" Height="20" RenderTransformOrigin="0.668,0.425"/>
 
     </Grid>
 

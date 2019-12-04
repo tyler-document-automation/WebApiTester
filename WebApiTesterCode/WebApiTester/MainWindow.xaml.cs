@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Net.Http;
@@ -17,6 +18,7 @@ namespace WebApiTester
     public partial class MainWindow : Window
     {
         public static HttpClient client;
+
         //string defaultURL = "http://localhost:23760/";
         string defaultURL = $"http://{Environment.MachineName}:8037/";
 
@@ -27,7 +29,7 @@ namespace WebApiTester
         {
             InitializeComponent();
             SetupWebClient(defaultURL, true, false);
-            
+
         }
 
         public async void SetupWebClient(string url, bool showOkStatus, bool getWithBody)
@@ -38,20 +40,22 @@ namespace WebApiTester
                 client = new HttpClient(handler);
             }
             else client = new HttpClient();
+
             client.BaseAddress = new Uri(url);
             // Environment.MachineName
             WebApiTextbox.Text = client.BaseAddress.ToString();
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.TryAddWithoutValidation("api_key", ((MainWindow)Application.Current.MainWindow).ApiKeyTextbox.Text);
+            client.DefaultRequestHeaders.TryAddWithoutValidation("api_key",
+                ((MainWindow) Application.Current.MainWindow).ApiKeyTextbox.Text);
 
             if (!showOkStatus) return;
             try
             {
                 HttpResponseMessage response = await client.GetAsync("/");
                 //var result = await response.Content.ReadAsStringAsync();
-                NoticeTextbox.Text = "Status: "+ response.ReasonPhrase;
+                NoticeTextbox.Text = "Status: " + response.ReasonPhrase;
 
             }
             catch
@@ -125,7 +129,8 @@ namespace WebApiTester
                         if (includeStream)
                         {
                             var body = JObject.Parse(result);
-                            if (body["filePackage"] != null && body["filePackage"].Type != JTokenType.Null && JObject.Parse(body["filePackage"].ToString())["package"] != null)
+                            if (body["filePackage"] != null && body["filePackage"].Type != JTokenType.Null &&
+                                JObject.Parse(body["filePackage"].ToString())["package"] != null)
                             {
                                 var package = JObject.Parse(body["filePackage"].ToString())["package"];
                                 byte[] zippedPackage = Convert.FromBase64String(package.ToString());
@@ -145,7 +150,8 @@ namespace WebApiTester
 
 
                                 NoticeTextbox.Text = "The zipped release package is saved to the local machine" +
-                                                     $"\nZip file path: \n{file.FullName}\n\n" + JValue.Parse(resultWithoutStream).ToString(Formatting.Indented);
+                                                     $"\nZip file path: \n{file.FullName}\n\n" +
+                                                     JValue.Parse(resultWithoutStream).ToString(Formatting.Indented);
                             }
                             else
                             {
@@ -345,7 +351,123 @@ namespace WebApiTester
             IncludeOrgCheckBox.IsChecked = false;
             SavePackageCheckBox.IsChecked = false;
         }
+
+       
+
+        private async void Button_CloseBatchIndexing(object sender, RoutedEventArgs e)
+        {
+            using (new WaitCursor())
+            {
+                int batchId = 0;
+                bool canConvert = int.TryParse(BatchIDTextbox.Text, out batchId);
+                if (!canConvert)
+                {
+                    NoticeTextbox.Text = "The input BatchID is not a valid integer.";
+                    return;
+                }
+                string result = "";
+
+                string url = ((MainWindow)Application.Current.MainWindow).WebApiTextbox.Text;
+                using (var client = new WebClient { UseDefaultCredentials = true })
+                {
+                    try
+                    {
+
+                        //HttpResponseMessage response =
+                        //    await client.PostAsync($"{defaultURL}api/validation/indexing/document/suspend/{batchID}", null);
+
+                        client.Headers.Add(HttpRequestHeader.ContentType, "application/json; charset=utf-8");
+                        var response =
+                            client.UploadData($"{url}/api/validation/indexing/batch/close/{batchId}", "POST",
+                                new byte[2]);
+
+                        NoticeTextbox.Text = response.ToString();
+                    }
+                    catch (WebException exception)
+                    {
+                        string responseText = null;
+
+                        var responseStream = exception.Response?.GetResponseStream();
+
+                        if (responseStream != null)
+                        {
+                            using (var reader = new StreamReader(responseStream))
+                            {
+                                responseText = reader.ReadToEnd();
+                            }
+                        }
+
+                        NoticeTextbox.Text =
+                            $"Error: {responseText}. \nPlease double check url, api Key and parameters";
+                    }
+                }
+            }
+        }
+
+        
+
+        private async void Button_CloseBatchRedaction(object sender, RoutedEventArgs e)
+        {
+            using (new WaitCursor())
+            {
+                int batchId = 0;
+                bool canConvert = int.TryParse(BatchIDTextbox.Text, out batchId);
+                if (!canConvert)
+                {
+                    NoticeTextbox.Text = "The input BatchID is not a valid integer.";
+                    return;
+                }
+                string result = "";
+
+                string url = ((MainWindow)Application.Current.MainWindow).WebApiTextbox.Text;
+                using (var client = new WebClient { UseDefaultCredentials = true })
+                {
+                    try
+                    {
+
+                        client.Headers.Add(HttpRequestHeader.ContentType, "application/json; charset=utf-8");
+                        var response =
+                            client.UploadData($"{url}/api/validation/redaction/batch/close/{batchId}", "POST",
+                                new byte[0]);
+
+                        NoticeTextbox.Text = response.ToString();
+                    }
+                    catch (WebException exception)
+                    {
+                        string responseText = null;
+
+                        var responseStream = exception.Response?.GetResponseStream();
+
+                        if (responseStream != null)
+                        {
+                            using (var reader = new StreamReader(responseStream))
+                            {
+                                responseText = reader.ReadToEnd();
+                            }
+                        }
+
+                        NoticeTextbox.Text =
+                            $"Error: {responseText}. \nPlease double check url, api Key and parameters";
+                    }
+                }
+            }
+        }
+
+
+        private async void Button_SuspendBatch2(object sender, RoutedEventArgs e)
+        {
+
+            HttpWebRequest request = (HttpWebRequest) HttpWebRequest.Create("http://myapp/home.aspx");
+
+            request.Method = "GET";
+            request.UseDefaultCredentials = false;
+            request.PreAuthenticate = true;
+            request.Credentials = new NetworkCredential("username", "password", "domain");
+
+            HttpWebResponse response = (HttpWebResponse) request.GetResponse(); // Raises Unauthorized Exception}
+
+        }
+
     }
 
 }
-
