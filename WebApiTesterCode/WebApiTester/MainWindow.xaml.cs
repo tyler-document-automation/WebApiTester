@@ -379,9 +379,9 @@ namespace WebApiTester
                         client.Headers.Add(HttpRequestHeader.ContentType, "application/json; charset=utf-8");
                         var response =
                             client.UploadData($"{url}/api/validation/indexing/batch/close/{batchId}", "POST",
-                                new byte[2]);
+                                new byte[0]);
 
-                        NoticeTextbox.Text = response.ToString();
+                        NoticeTextbox.Text = "Batch closed successfully. " + BytesToStringConverted(response);
                     }
                     catch (WebException exception)
                     {
@@ -419,7 +419,9 @@ namespace WebApiTester
                 }
                 string result = "";
 
-                string url = ((MainWindow)Application.Current.MainWindow).WebApiTextbox.Text;
+                //string url = ((MainWindow)Application.Current.MainWindow).WebApiTextbox.Text;
+                string url = "http://indexingdev:8037/";
+
                 using (var client = new WebClient { UseDefaultCredentials = true })
                 {
                     try
@@ -430,7 +432,7 @@ namespace WebApiTester
                             client.UploadData($"{url}/api/validation/redaction/batch/close/{batchId}", "POST",
                                 new byte[0]);
 
-                        NoticeTextbox.Text = response.ToString();
+                        NoticeTextbox.Text = "Batch closed successfully. " + BytesToStringConverted(response);
                     }
                     catch (WebException exception)
                     {
@@ -454,6 +456,19 @@ namespace WebApiTester
         }
 
 
+
+        private static string BytesToStringConverted(byte[] bytes)
+        {
+            using (var stream = new MemoryStream(bytes))
+            {
+                using (var streamReader = new StreamReader(stream))
+                {
+                    return streamReader.ReadToEnd();
+
+
+                }
+            }
+        }
         private async void Button_SuspendBatch2(object sender, RoutedEventArgs e)
         {
 
