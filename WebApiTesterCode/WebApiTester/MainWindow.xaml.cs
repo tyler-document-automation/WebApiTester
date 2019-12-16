@@ -34,12 +34,11 @@ namespace WebApiTester
 
         public async void SetupWebClient(string url, bool showOkStatus, bool getWithBody)
         {
-            if (getWithBody)
-            {
-                var handler = new WinHttpHandler();
-                client = new HttpClient(handler);
-            }
-            else client = new HttpClient();
+            
+            var handler = new WinHttpHandler();
+            handler.DefaultProxyCredentials = CredentialCache.DefaultCredentials;
+            client = new HttpClient(handler);
+       
 
             client.BaseAddress = new Uri(url);
             // Environment.MachineName

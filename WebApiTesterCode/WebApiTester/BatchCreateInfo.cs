@@ -11,13 +11,14 @@
         /// <param name="workflowId"></param>
         /// <param name="runId"></param>
         /// <param name="documents"></param>
-        /// <param name="filerData"></param>
+        /// <param name="priority"></param>
         public BatchCreateInfo(string className, string name, int workflowId, string runId, BatchDocumentInfo[] documents)
         {
             this.className = className;
             this.name = name;
             this.workflowId = workflowId;
             this.runId = runId;
+            //this.priority = priority;
             this.documents = documents;
         }
         #endregion
@@ -32,6 +33,12 @@
         /// Batch Name
         /// </summary>
         public string name { get; set; }
+
+
+        /// <summary>
+        /// Batch priority
+        /// </summary>
+        public int priority { get; set; }
 
         /// <summary>
         /// Workflow Id

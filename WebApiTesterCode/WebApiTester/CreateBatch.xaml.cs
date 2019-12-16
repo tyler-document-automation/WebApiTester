@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -41,7 +42,9 @@ namespace WebApiTester
         {
             batchDocsList = new List<BatchDocumentInfo>();
             sequence = 1;
-            client = new HttpClient();
+            var handler = new HttpClientHandler();
+            handler.DefaultProxyCredentials = CredentialCache.DefaultCredentials;
+            client = new HttpClient(handler);
             DocumentsTextbox.Text = "Attached Documents: ";
         }
 
@@ -54,6 +57,8 @@ namespace WebApiTester
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.TryAddWithoutValidation("api_key", ((MainWindow)Application.Current.MainWindow).ApiKeyTextbox.Text);
+            
+
         }
 
         private async void BindDropDownList()
@@ -190,6 +195,7 @@ namespace WebApiTester
                     return;
                     }
                     int workflowId = 0;
+                    int priority = 0;
                     string batchClass = BatchClassComboBox.SelectedItem.ToString();
                     if (!string.IsNullOrWhiteSpace(WorkflowComboBox.SelectedItem.ToString()))
                     {
@@ -200,16 +206,33 @@ namespace WebApiTester
                             return;
                         }
                     }
-                    //var batchDocs = new List<BatchDocumentInfo>{batchdoc}.ToArray();
+
+                    if (!string.IsNullOrWhiteSpace(PriorityTextBox.Text))
+                    {
+                        bool canConvert = int.TryParse(PriorityTextBox.Text, out priority);
+                        if (!canConvert)
+                        {
+                            StatusLabel.Content = "The input priority is not a valid integer.";
+                            return;
+                        }
+
+                        if (priority < 0 || priority >= 10)
+                        {
+                            StatusLabel.Content = "The input priority is out of range.";
+                            return;
+                        }
+                    }
+                //var batchDocs = new List<BatchDocumentInfo>{batchdoc}.ToArray();
                     var batchDocs = batchDocsList.ToArray();
-                    BatchCreateInfo batchCreateInfo = new BatchCreateInfo(
-                        batchClass,
-                        BatchNameTextbox.Text,
-                        workflowId,
-                        RunIDTextbox.Text,
-                        batchDocs.Length == 0 ? null : batchDocs
-                        
-                    );
+                        BatchCreateInfo batchCreateInfo = new BatchCreateInfo(
+                            batchClass,
+                            BatchNameTextbox.Text,
+                            //priority,
+                            workflowId,
+                            RunIDTextbox.Text,
+                            batchDocs.Length == 0 ? null : batchDocs
+                            
+                        );
 
                     StatusLabel.Content = "Creating Batch...";
                   
@@ -327,28 +350,6 @@ namespace WebApiTester
             docType = DocTypeComboBox.SelectedItem.ToString();
         }
 
-        //private void ButtonLoadDocumentType(object sender, RoutedEventArgs e)
-        //{
-           
-        //    ////DocTypeComboBox.Text = "--Document Type--";
-        //    //var batchDefName = BatchClassComboBox.SelectedItem.ToString();
-        //    //var requestUrl = $"api/Batch/DocumentDefinitionNames/{batchDefName}";
-        //    //var response = client.GetAsync(requestUrl).Result;
-
-        //    //if (response.IsSuccessStatusCode)
-        //    //{
-        //    //    var content = response.Content.ReadAsStringAsync().Result;
-        //    //    var docDefNames = JsonConvert.DeserializeObject<List<string>>(content);
-
-        //    //    this.DocTypeComboBox.ItemsSource = docDefNames.Select(i => i).ToList();
-        //    //}
-        //    //else
-        //    //{
-        //    //    //StatusLabel.Content = $"Error in getting document type for the batch class from the server. \nReason : {response.ReasonPhrase}";
-        //    //    DocTypeComboBox.Text = "No Document Type";
-        //    //    return;
-        //    //}
-            
-        //}
+        
     }
 }
