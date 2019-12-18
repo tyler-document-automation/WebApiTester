@@ -25,15 +25,16 @@ namespace WebApiTester
         private static HttpClient client;
         private static string docType;
         public static string selectedType = "--Document Type--";
-        public static List<string> docTypes;
         public int uploadDocCount;
+        private static List<string> textBoxList;
+        public static Dictionary<string, int> BatchDefPriorityDictionary;
 
         public CreateBatch()
         {
             InitializeComponent();
             initializeProperties();
             setUpWebClient();
-            BindDropDownList();
+            PopulateDropDownListAndField();
             //DataContext = new ViewModel();
 
         }
@@ -41,6 +42,9 @@ namespace WebApiTester
         public void initializeProperties()
         {
             batchDocsList = new List<BatchDocumentInfo>();
+            BatchDefPriorityDictionary = new Dictionary<string, int>();
+            textBoxList = new List<string>();
+            uploadDocCount = 0;
             sequence = 1;
             var handler = new HttpClientHandler();
             handler.DefaultProxyCredentials = CredentialCache.DefaultCredentials;
@@ -61,21 +65,23 @@ namespace WebApiTester
 
         }
 
-        private async void BindDropDownList()
+        private async void PopulateDropDownListAndField()
         {
             try
             {
-
-
                 var requestUrl = $"api/Batch/DefinitionNames";
                 HttpResponseMessage response = await client.GetAsync(requestUrl);
 
                 if (response.IsSuccessStatusCode)
                 {
                     var content = await response.Content.ReadAsStringAsync();
-                    var batchdefNames = JsonConvert.DeserializeObject<List<string>>(content);
+                    var batchDefData = JsonConvert.DeserializeObject<List<BatchDefinitionData>>(content);
+                    foreach (var item in batchDefData)
+                    {
 
-                    BatchClassComboBox.ItemsSource = batchdefNames.Select(i => i).ToList();
+                        BatchDefPriorityDictionary.Add(item.Name, item.DefaultPriority);
+                    }
+                    BatchClassComboBox.ItemsSource = batchDefData.Select(i => i.Name).ToList();
                 }
                 else
                 {
@@ -133,9 +139,15 @@ namespace WebApiTester
                     {
                         var fileName = Path.GetFileName(filePath);
                         batchDocsList.Add(new BatchDocumentInfo(fileName, filePath, null,
-                            String.IsNullOrWhiteSpace(docType) ? null : docType, null));
-                        DocumentsTextbox.Text += $"\n{sequence}. {docType} -> {fileName} -> filePath";
+                            String.IsNullOrWhiteSpace(docType) ? null : docType, null, StartingPageTextbox.Text));
+                        string item = $"\n{sequence}. {docType} -> {fileName} -> filePath";
+                        if (!string.IsNullOrWhiteSpace(StartingPageTextbox.Text))
+                        {
+                            item += " -> startingPage: " + StartingPageTextbox.Text;
+                        }
+                        textBoxList.Add(item);
                         sequence++;
+                        RebuildDocumentTextBox();
                     }
                 }
                 else
@@ -146,9 +158,22 @@ namespace WebApiTester
                         byte[] bytes = File.ReadAllBytes(dlg.FileName);
                         var data = Convert.ToBase64String(bytes);
                         batchDocsList.Add(new BatchDocumentInfo(fileName, null, data,
-                            String.IsNullOrWhiteSpace(docType) ? null : docType, null));
-                        DocumentsTextbox.Text += $"\n{sequence}. {docType} -> {fileName} -> dataStream";
+                            String.IsNullOrWhiteSpace(docType) ? null : docType, null, StartingPageTextbox.Text));
+                        //DocumentsTextbox.Text += $"\n{sequence}. {docType} -> {fileName} -> dataStream";
+                        //if (!string.IsNullOrWhiteSpace(StartingPageTextbox.Text))
+                        //{
+                        //    DocumentsTextbox.Text += " -> startingPage: " + StartingPageTextbox.Text;
+                        //}
+                        //
+                        string item = $"\n{sequence}. {docType} -> {fileName} -> dataStream";
+                        if (!string.IsNullOrWhiteSpace(StartingPageTextbox.Text))
+                        {
+                            item += " -> startingPage: " + StartingPageTextbox.Text;
+                        }
+                        textBoxList.Add(item);
                         sequence++;
+                        RebuildDocumentTextBox();
+                        
                     }
                 }
 
@@ -169,16 +194,29 @@ namespace WebApiTester
             if (result == true)
             {
                 var filePath = dlg.FileName;
-                DocumentsTextbox.Text += "-> filerData ";
+                //DocumentsTextbox.Text += "-> filerData ";
                 string json = "";
                 using (StreamReader r = new StreamReader(filePath))
                 {
                     json = r.ReadToEnd();
                 }
 
-                DocumentsTextbox.Text += filePath;
-                
-                batchDocsList.Last().filerData = json;
+                //DocumentsTextbox.Text += filePath;
+                while (uploadDocCount != 0)
+                {
+                    if (batchDocsList.Count != textBoxList.Count)
+                    {
+                        StatusLabel.Content = "Please clear all documents and redo the upload. Attached documents do not match the records in quantity.";
+                        return;
+                    }
+
+                    batchDocsList[batchDocsList.Count - uploadDocCount].filerData = json;
+                    textBoxList[textBoxList.Count - uploadDocCount] += " -> filerData " + Path.GetFileName(filePath);
+                    uploadDocCount--;
+                }
+
+                //batchDocsList.Last().filerData = json;
+                RebuildDocumentTextBox();
 
             }
         }
@@ -216,22 +254,30 @@ namespace WebApiTester
                             return;
                         }
 
-                        if (priority < 0 || priority >= 10)
+                        if (priority <= 0 || priority > 10)
                         {
                             StatusLabel.Content = "The input priority is out of range.";
                             return;
                         }
                     }
-                //var batchDocs = new List<BatchDocumentInfo>{batchdoc}.ToArray();
+
+                  
                     var batchDocs = batchDocsList.ToArray();
-                        BatchCreateInfo batchCreateInfo = new BatchCreateInfo(
-                            batchClass,
-                            BatchNameTextbox.Text,
-                            //priority,
-                            workflowId,
-                            RunIDTextbox.Text,
-                            batchDocs.Length == 0 ? null : batchDocs
-                            
+
+                    BatchCreateInfo batchCreateInfo = string.IsNullOrWhiteSpace(PriorityTextBox.Text) ? 
+                        new BatchCreateInfo(
+                        batchClass,
+                        BatchNameTextbox.Text,
+                        workflowId,
+                        RunIDTextbox.Text,
+                        batchDocs.Length == 0 ? null : batchDocs) : 
+                        new BatchCreateInfo(
+                        batchClass,
+                        BatchNameTextbox.Text,
+                        priority,
+                        workflowId,
+                        RunIDTextbox.Text,
+                        batchDocs.Length == 0 ? null : batchDocs
                         );
 
                     StatusLabel.Content = "Creating Batch...";
@@ -296,6 +342,8 @@ namespace WebApiTester
         {
             DocumentsTextbox.Text = "Attached Documents: ";
             sequence = 1;
+            textBoxList = new List<string>();
+            uploadDocCount = 0;
             batchDocsList = new List<BatchDocumentInfo>();
         }
 
@@ -304,6 +352,7 @@ namespace WebApiTester
             //DocTypeComboBox.Text = "--Document Type--";
             var batchDefName = BatchClassComboBox.SelectedItem.ToString();
             var requestUrl = $"api/Batch/DocumentDefinitionNames/{batchDefName}";
+            PriorityTextBox.Text = BatchDefPriorityDictionary[batchDefName].ToString();
             var response = client.GetAsync(requestUrl).Result;
 
             if (response.IsSuccessStatusCode)
@@ -350,6 +399,16 @@ namespace WebApiTester
             docType = DocTypeComboBox.SelectedItem.ToString();
         }
 
-        
+
+        private void RebuildDocumentTextBox()
+        {
+           
+            DocumentsTextbox.Text = "Attached Documents: ";
+            
+            foreach (var item in textBoxList)
+            {
+                DocumentsTextbox.Text += item;
+            }
+        }
     }
 }

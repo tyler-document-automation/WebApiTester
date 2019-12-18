@@ -4,14 +4,16 @@
     {
         #region Constructors
       
-        public BatchDocumentInfo(string name, string file, string data, string docType, string filerData)
+        public BatchDocumentInfo(string name, string file, string data, string docType, string filerData, string startingPage)
         {
             this.name = name;
             this.file = file;
             this.data = data;
             this.docType = docType;
             this.filerData = filerData;
+            this.startingPage = startingPage;
         }
+
         #endregion
         #region Properties
         /// <summary>
@@ -23,10 +25,12 @@
         public string data { get; set; }
 
         public string docType { get; set; }
+        public string startingPage { get; set; }
         /// <summary>
         /// meta data that the filer used for scripting
         /// </summary>
         public string filerData { get; set; }
+
 
         #endregion
     }

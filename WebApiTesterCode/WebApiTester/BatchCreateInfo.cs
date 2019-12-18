@@ -21,6 +21,17 @@
             //this.priority = priority;
             this.documents = documents;
         }
+
+
+        public BatchCreateInfo(string className, string name, int priority, int workflowId, string runId, BatchDocumentInfo[] documents)
+        {
+            this.className = className;
+            this.name = name;
+            this.workflowId = workflowId;
+            this.runId = runId;
+            this.priority = priority;
+            this.documents = documents;
+        }
         #endregion
 
         #region Properties

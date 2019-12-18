@@ -215,6 +215,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BatchDefinitionData.cs" />
     <Compile Include="WaitCursor.cs" />
     <Page Include="CreateBatch.xaml">
       <SubType>Designer</SubType>
