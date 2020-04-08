@@ -61,8 +61,6 @@ namespace WebApiTester
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.TryAddWithoutValidation("api_key", ((MainWindow)Application.Current.MainWindow).ApiKeyTextbox.Text);
-            
-
         }
 
         private async void PopulateDropDownListAndField()
@@ -90,25 +88,6 @@ namespace WebApiTester
                     ((MainWindow)Application.Current.MainWindow).NoticeTextbox.Text = $"Error in getting batch definition names from the server. \nReason : {response.ReasonPhrase} \nPlease double check url, api Key and parameters ";
                     return;
                 }
-
-
-                requestUrl = $"api/Workflows/Ids";
-                response = await client.GetAsync(requestUrl);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var workflows = JsonConvert.DeserializeObject<List<int>>(content);
-                    WorkflowComboBox.ItemsSource = workflows.Select(i => i).ToList();
-                }
-                else
-                {
-                    WorkflowComboBox.Text = "Error in getting workflows from the server.";
-                    StatusLabel.Content = $"Error in getting workflows from the server. \nReason : {response.ReasonPhrase}";
-
-                    return;
-                }
-
             }
             catch (Exception ex)
             {
@@ -173,7 +152,7 @@ namespace WebApiTester
                         textBoxList.Add(item);
                         sequence++;
                         RebuildDocumentTextBox();
-                        
+
                     }
                 }
 
@@ -224,79 +203,68 @@ namespace WebApiTester
         private void Button_CreateBatch(object sender, RoutedEventArgs e)
         {
             try
+            {
+                if (BatchClassComboBox.SelectedItem == null)
                 {
-                    if (BatchClassComboBox.SelectedItem == null || WorkflowComboBox.SelectedItem == null)
-                    {
-                        StatusLabel.Content = "Error in creating an batch. \nThe workflowId or batch class name cannot be null";
-                        ((MainWindow)Application.Current.MainWindow).NoticeTextbox.Text = "Error in creating an batch. \nThe workflowId or batch class name cannot be null";
+                    StatusLabel.Content = "Error in creating an batch. \nThe batch class name cannot be null";
+                    ((MainWindow)Application.Current.MainWindow).NoticeTextbox.Text = "Error in creating an batch. \nThe workflowId or batch class name cannot be null";
 
                     return;
-                    }
-                    int workflowId = 0;
-                    int priority = 0;
-                    string batchClass = BatchClassComboBox.SelectedItem.ToString();
-                    if (!string.IsNullOrWhiteSpace(WorkflowComboBox.SelectedItem.ToString()))
-                    {
-                        bool canConvert = int.TryParse(WorkflowComboBox.SelectedItem.ToString(), out workflowId);
-                        if (!canConvert)
-                        {
-                            StatusLabel.Content = "The input workflowID is not a valid integer.";
-                            return;
-                        }
-                    }
+                }
 
-                    if (!string.IsNullOrWhiteSpace(PriorityTextBox.Text))
-                    {
-                        bool canConvert = int.TryParse(PriorityTextBox.Text, out priority);
-                        if (!canConvert)
-                        {
-                            StatusLabel.Content = "The input priority is not a valid integer.";
-                            return;
-                        }
+                int priority = 0;
+                string batchClass = BatchClassComboBox.SelectedItem.ToString();
 
-                        if (priority <= 0 || priority > 10)
-                        {
-                            StatusLabel.Content = "The input priority is out of range.";
-                            return;
-                        }
+                if (!string.IsNullOrWhiteSpace(PriorityTextBox.Text))
+                {
+                    bool canConvert = int.TryParse(PriorityTextBox.Text, out priority);
+                    if (!canConvert)
+                    {
+                        StatusLabel.Content = "The input priority is not a valid integer.";
+                        return;
                     }
 
-                  
-                    var batchDocs = batchDocsList.ToArray();
-
-                    BatchCreateInfo batchCreateInfo = string.IsNullOrWhiteSpace(PriorityTextBox.Text) ? 
-                        new BatchCreateInfo(
-                        batchClass,
-                        BatchNameTextbox.Text,
-                        workflowId,
-                        RunIDTextbox.Text,
-                        batchDocs.Length == 0 ? null : batchDocs) : 
-                        new BatchCreateInfo(
-                        batchClass,
-                        BatchNameTextbox.Text,
-                        priority,
-                        workflowId,
-                        RunIDTextbox.Text,
-                        batchDocs.Length == 0 ? null : batchDocs
-                        );
-
-                    StatusLabel.Content = "Creating Batch...";
-                  
-                    var param = JsonConvert.SerializeObject(batchCreateInfo);
-                    HttpContent contentPost = new StringContent(param, Encoding.UTF8, "application/json");
-                    using (new WaitCursor())
+                    if (priority <= 0 || priority > 10)
                     {
-                        var response = client.PostAsync("/api/Batch/Create", contentPost).Result;
-                        var result = response.Content.ReadAsStringAsync().Result;
-                    
+                        StatusLabel.Content = "The input priority is out of range.";
+                        return;
+                    }
+                }
+
+
+                var batchDocs = batchDocsList.ToArray();
+
+                BatchCreateInfo batchCreateInfo = string.IsNullOrWhiteSpace(PriorityTextBox.Text) ?
+                    new BatchCreateInfo(
+                    batchClass,
+                    BatchNameTextbox.Text,
+                    RunIDTextbox.Text,
+                    batchDocs.Length == 0 ? null : batchDocs) :
+                    new BatchCreateInfo(
+                    batchClass,
+                    BatchNameTextbox.Text,
+                    priority,
+                    RunIDTextbox.Text,
+                    batchDocs.Length == 0 ? null : batchDocs
+                    );
+
+                StatusLabel.Content = "Creating Batch...";
+
+                var param = JsonConvert.SerializeObject(batchCreateInfo);
+                HttpContent contentPost = new StringContent(param, Encoding.UTF8, "application/json");
+                using (new WaitCursor())
+                {
+                    var response = client.PostAsync("/api/Batch/Create", contentPost).Result;
+                    var result = response.Content.ReadAsStringAsync().Result;
+
 
                     if (response.IsSuccessStatusCode)
                     {
                         var body = JObject.Parse(result);
                         var BatchID = body["batchId"];
 
-                        ((MainWindow) Application.Current.MainWindow).BatchIDTextbox.Text = BatchID.ToString();
-                        ((MainWindow) Application.Current.MainWindow).NoticeTextbox.Text =
+                        ((MainWindow)Application.Current.MainWindow).BatchIDTextbox.Text = BatchID.ToString();
+                        ((MainWindow)Application.Current.MainWindow).NoticeTextbox.Text =
                             $"Batch ID: {BatchID} successfully created for batch {batchCreateInfo.name}."
                             + Environment.NewLine
                             + JValue.Parse(result).ToString(Formatting.Indented);
@@ -306,27 +274,27 @@ namespace WebApiTester
                     {
                         StatusLabel.Content =
                             $"Failed to create the batch {batchCreateInfo.name}. \nSee main windows for detailed error message.";
-                        ((MainWindow) Application.Current.MainWindow).BatchIDTextbox.Text = "";
+                        ((MainWindow)Application.Current.MainWindow).BatchIDTextbox.Text = "";
 
                         try
                         {
-                            ((MainWindow) Application.Current.MainWindow).NoticeTextbox.Text =
+                            ((MainWindow)Application.Current.MainWindow).NoticeTextbox.Text =
                                 ($"Failed to create the batch {batchCreateInfo.name}. Exception: {result}");
                         }
                         catch (Exception)
                         {
-                            ((MainWindow) Application.Current.MainWindow).NoticeTextbox.Text =
+                            ((MainWindow)Application.Current.MainWindow).NoticeTextbox.Text =
                                 ($"Failed to create the batch {batchCreateInfo.name}. No result from the Web Api.");
                         }
                     }
-                    }
-            }
-                catch (Exception ex)
-                {
-                    StatusLabel.Content = $"Error: {ex.Message}. \nPlease double check url, api Key and parameters";
                 }
+            }
+            catch (Exception ex)
+            {
+                StatusLabel.Content = $"Error: {ex.Message}. \nPlease double check url, api Key and parameters";
+            }
         }
-        
+
 
         private void BatchNameTextbox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
@@ -347,7 +315,7 @@ namespace WebApiTester
             batchDocsList = new List<BatchDocumentInfo>();
         }
 
-        private  void BatchClassComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void BatchClassComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             //DocTypeComboBox.Text = "--Document Type--";
             var batchDefName = BatchClassComboBox.SelectedItem.ToString();
@@ -364,26 +332,28 @@ namespace WebApiTester
                     DocTypeComboBox.SelectedIndex = -1;
                 }
                 catch { }
-                finally { 
-                DocTypeComboBox.SelectedIndex = -1;
-                DocTypeComboBox.SelectedValue = null;
-                DocTypeComboBox.SelectedValuePath = "";
-                this.DocTypeComboBox.SelectedItem = null;
+                finally
+                {
+                    DocTypeComboBox.SelectedIndex = -1;
+                    DocTypeComboBox.SelectedValue = null;
+                    DocTypeComboBox.SelectedValuePath = "";
+                    this.DocTypeComboBox.SelectedItem = null;
 
-                this.DocTypeComboBox.Items.Clear();
-                this.DocTypeComboBox.Items.Refresh();
-                //this.DocTypeComboBox.Text = docDefNames.FirstOrDefault();
-                foreach (var item in docDefNames) {
-                    this.DocTypeComboBox.Items.Add(item); //this.DocTypeComboBox.Items.Add(new ComboBoxItem { Content = item });
+                    this.DocTypeComboBox.Items.Clear();
+                    this.DocTypeComboBox.Items.Refresh();
+                    //this.DocTypeComboBox.Text = docDefNames.FirstOrDefault();
+                    foreach (var item in docDefNames)
+                    {
+                        this.DocTypeComboBox.Items.Add(item); //this.DocTypeComboBox.Items.Add(new ComboBoxItem { Content = item });
                     }
-               
-                //DocTypeComboBox.SelectionBoxItem = null;
-                DocTypeComboBox.SelectedIndex = -1;
-                DocTypeComboBox.SelectedValue = null;
-                DocTypeComboBox.SelectedValuePath = "";
-                this.DocTypeComboBox.SelectedItem = null;
-                this.DocTypeComboBox.Text = "Document Type";
-                docType = "";
+
+                    //DocTypeComboBox.SelectionBoxItem = null;
+                    DocTypeComboBox.SelectedIndex = -1;
+                    DocTypeComboBox.SelectedValue = null;
+                    DocTypeComboBox.SelectedValuePath = "";
+                    this.DocTypeComboBox.SelectedItem = null;
+                    this.DocTypeComboBox.Text = "Document Type";
+                    docType = "";
                 }
             }
             else
@@ -402,9 +372,9 @@ namespace WebApiTester
 
         private void RebuildDocumentTextBox()
         {
-           
+
             DocumentsTextbox.Text = "Attached Documents: ";
-            
+
             foreach (var item in textBoxList)
             {
                 DocumentsTextbox.Text += item;

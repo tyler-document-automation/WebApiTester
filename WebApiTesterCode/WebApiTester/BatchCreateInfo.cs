@@ -12,22 +12,20 @@
         /// <param name="runId"></param>
         /// <param name="documents"></param>
         /// <param name="priority"></param>
-        public BatchCreateInfo(string className, string name, int workflowId, string runId, BatchDocumentInfo[] documents)
+        public BatchCreateInfo(string className, string name, string runId, BatchDocumentInfo[] documents)
         {
             this.className = className;
             this.name = name;
-            this.workflowId = workflowId;
             this.runId = runId;
             //this.priority = priority;
             this.documents = documents;
         }
 
 
-        public BatchCreateInfo(string className, string name, int priority, int workflowId, string runId, BatchDocumentInfo[] documents)
+        public BatchCreateInfo(string className, string name, int priority, string runId, BatchDocumentInfo[] documents)
         {
             this.className = className;
             this.name = name;
-            this.workflowId = workflowId;
             this.runId = runId;
             this.priority = priority;
             this.documents = documents;
@@ -50,11 +48,6 @@
         /// Batch priority
         /// </summary>
         public int priority { get; set; }
-
-        /// <summary>
-        /// Workflow Id
-        /// </summary>
-        public int workflowId { get; set; }
 
         /// <summary>
         /// File Information array

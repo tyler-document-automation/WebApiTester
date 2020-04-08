@@ -25,23 +25,21 @@
         </Rectangle>
 
         <Label Content="Class Name" HorizontalAlignment="Left" Margin="71,25,0,0" VerticalAlignment="Top" Height="25" Width="85"/>
-        <Label Content="Batch Name (optional)" HorizontalAlignment="Left" Margin="71,74,0,0" VerticalAlignment="Top" Height="25" Width="128"/>
-        <TextBox x:Name ="BatchNameTextbox" HorizontalAlignment="Left" Height="24" Margin="245,74,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" TextChanged="BatchNameTextbox_TextChanged"/>
-        <Label Content="Workflow" HorizontalAlignment="Left" Margin="71,169,0,0" VerticalAlignment="Top" Height="25" Width="114"/>
-        <Label Content="Run ID (optional)" HorizontalAlignment="Left" Margin="71,206,0,0" VerticalAlignment="Top" Height="27" Width="102"/>
-        <TextBox x:Name ="RunIDTextbox" HorizontalAlignment="Left" Height="23" Margin="245,209,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="146"/>
+        <Label Content="Batch Name (optional)" HorizontalAlignment="Left" Margin="71,75,0,0" VerticalAlignment="Top" Height="25" Width="128"/>
+        <TextBox x:Name ="BatchNameTextbox" HorizontalAlignment="Left" Height="24" Margin="245,75,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" TextChanged="BatchNameTextbox_TextChanged"/>
+        <Label Content="Run ID (optional)" HorizontalAlignment="Left" Margin="71,175,0,0" VerticalAlignment="Top" Height="27" Width="102"/>
+        <TextBox x:Name ="RunIDTextbox" HorizontalAlignment="Left" Height="23" Margin="245,175,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="146"/>
         <TextBox x:Name ="DocumentsTextbox" IsReadOnly="True" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="181" Margin="20,332,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="450"/>
         <Button Content="Attach Document" HorizontalAlignment="Left" Margin="99,307,0,0" VerticalAlignment="Top" Width="104" Click="ButtonBrowseClick" Height="20" RenderTransformOrigin="0.668,0.425"/>
         <Button Content="Create Batch" HorizontalAlignment="Left" Margin="164,539,0,0" VerticalAlignment="Top" Width="132" Click="Button_CreateBatch" Height="36"/>
         <Label x:Name ="StatusLabel" Content="" HorizontalAlignment="Left" Margin="55,600,0,0" VerticalAlignment="Top" Width="378" Height="69"/>
         <CheckBox x:Name ="FilePathCheckBox" Content="Send as file path" HorizontalAlignment="Left" Margin="161,275,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked" Width="108"/>
         <Button Content="Clear All Documents" HorizontalAlignment="Left" Margin="352,518,0,0" VerticalAlignment="Top" Width="118" Click="ButtonClearAllDocs" Height="20"/>
-        <ComboBox x:Name ="WorkflowComboBox" Text ="--Select Workflow--" IsEditable="True" IsReadOnly="True" HorizontalAlignment="Left" Margin="245,169,0,0" VerticalAlignment="Top" Width="146" Height="25"/>
-        <ComboBox x:Name ="BatchClassComboBox" Text ="--Select Batch Class--" IsEditable="True" IsReadOnly="True"  HorizontalAlignment="Left" Margin="245,30,0,0" VerticalAlignment="Top" Width="146" SelectionChanged="BatchClassComboBox_SelectionChanged"/>
+        <ComboBox x:Name ="BatchClassComboBox" Text ="--Select Batch Class--" IsEditable="True" IsReadOnly="True"  HorizontalAlignment="Left" Margin="245,25,0,0" VerticalAlignment="Top" Width="146" SelectionChanged="BatchClassComboBox_SelectionChanged"/>
         <ComboBox x:Name ="DocTypeComboBox" Text ="Document Type" IsEditable="True" IsReadOnly="True" HorizontalAlignment="Left" Margin="20,271,0,0" VerticalAlignment="Top" Width="108" SelectedValue ="{Binding selectedType}"  ItemsSource="{Binding docTypes}" SelectionChanged="DocTypeComboBox_SelectionChanged" RenderTransformOrigin="0.787,0.795"/>
         <Button Content="Upload FilerData" HorizontalAlignment="Left" Margin="266,306,0,0" VerticalAlignment="Top" Width="104" Click="ButtonFilerDataClick" Height="20" RenderTransformOrigin="0.668,0.425"/>
-        <Label Content="Priority (optional: 0~10)" HorizontalAlignment="Left" Margin="71,120,0,0" VerticalAlignment="Top" Height="25" Width="139"/>
-        <TextBox x:Name ="PriorityTextBox" HorizontalAlignment="Left" Height="24" Margin="245,120,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146"/>
+        <Label Content="Priority (optional: 0~10)" HorizontalAlignment="Left" Margin="71,125,0,0" VerticalAlignment="Top" Height="25" Width="139"/>
+        <TextBox x:Name ="PriorityTextBox" HorizontalAlignment="Left" Height="24" Margin="245,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146"/>
         <Label Content="Starting Page (optional):" HorizontalAlignment="Left" Margin="293,269,0,0" VerticalAlignment="Top" Height="27" Width="140"/>
         <TextBox x:Name ="StartingPageTextbox" HorizontalAlignment="Left" Height="22" Margin="433,272,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="37"/>
 
