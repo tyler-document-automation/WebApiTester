@@ -52,7 +52,7 @@ namespace WebApiTester
             if (!showOkStatus) return;
             try
             {
-                HttpResponseMessage response = await client.GetAsync("/");
+                HttpResponseMessage response = await client.GetAsync("/api/Batch/DefinitionNames");
                 //var result = await response.Content.ReadAsStringAsync();
                 NoticeTextbox.Text = "Status: " + response.ReasonPhrase;
 

@@ -134,7 +134,7 @@ namespace WebApiTester
                     foreach (var filePath in dlg.FileNames)
                     {
                         var fileName = Path.GetFileName(filePath);
-                        byte[] bytes = File.ReadAllBytes(dlg.FileName);
+                        byte[] bytes = File.ReadAllBytes(filePath);
                         var data = Convert.ToBase64String(bytes);
                         batchDocsList.Add(new BatchDocumentInfo(fileName, null, data,
                             String.IsNullOrWhiteSpace(docType) ? null : docType, null, StartingPageTextbox.Text));
