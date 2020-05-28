@@ -1,4 +1,4 @@
-## Note
+## Web API Tester
 
 - CSI releases the web api tester tool (in zip file) for users to test web api calls.
 
@@ -6,6 +6,6 @@
 
 
 
-<a href="http://teamcity/viewType.html?buildTypeId=&guest=1" target="_blank">
-	<img src="https://devops.csisoft.com/app/rest/builds/buildType:(id:)/statusIcon"/>
+<a href="http://teamcity/viewType.html?buildTypeId=Intellidact_Utilities_WebApiTester&guest=1" target="_blank">
+	<img src="https://devops.csisoft.com/app/rest/builds/buildType:(id:Intellidact_Utilities_WebApiTester)/statusIcon"/>
 </a>
