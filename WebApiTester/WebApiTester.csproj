@@ -279,4 +279,5 @@
     </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\OctoPack.2.0.26\targets\OctoPack.targets" />
 </Project>
