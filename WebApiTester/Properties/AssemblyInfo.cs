@@ -8,12 +8,12 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("WebApiTester")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WebApiTester")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyDescription("CSI GIT REPO WebApiTester")]
+[assembly: AssemblyConfiguration("Debug - x86 - .Net Framework v5.0.0.0")]
+[assembly: AssemblyCompany("Computing System Innovations")]
+[assembly: AssemblyProduct("Web API Tester")]
+[assembly: AssemblyCopyright("2020 CSI. All rights reserved.")]
+[assembly: AssemblyTrademark("Intellidact")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
