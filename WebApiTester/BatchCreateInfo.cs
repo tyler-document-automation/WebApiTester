@@ -58,7 +58,11 @@
         /// runID, the file drop folder to run different experiments 
         /// </summary>
         public string runId { get; set; }
-
+        
+        /// <summary>
+        /// User generated batch id
+        /// </summary>
+        public string externalBatchId { get; set; }
         
         #endregion
     }

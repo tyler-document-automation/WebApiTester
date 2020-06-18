@@ -118,11 +118,18 @@ namespace WebApiTester
                     {
                         var fileName = Path.GetFileName(filePath);
                         batchDocsList.Add(new BatchDocumentInfo(fileName, filePath, null,
-                            String.IsNullOrWhiteSpace(docType) ? null : docType, null, StartingPageTextbox.Text));
+                            String.IsNullOrWhiteSpace(docType) ? null : docType, null, StartingPageTextbox.Text, 
+                            string.IsNullOrEmpty(ExternalDocIdTextbox.Text) || string.IsNullOrWhiteSpace(ExternalDocIdTextbox.Text) ? null : ExternalDocIdTextbox.Text));
                         string item = $"\n{sequence}. {docType} -> {fileName} -> filePath";
                         if (!string.IsNullOrWhiteSpace(StartingPageTextbox.Text))
                         {
                             item += " -> startingPage: " + StartingPageTextbox.Text;
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(ExternalDocIdTextbox.Text) &&
+                            !string.IsNullOrEmpty(ExternalDocIdTextbox.Text))
+                        {
+                           item += " -> externalDocumentId: " + ExternalDocIdTextbox.Text;
                         }
                         textBoxList.Add(item);
                         sequence++;
@@ -137,7 +144,8 @@ namespace WebApiTester
                         byte[] bytes = File.ReadAllBytes(filePath);
                         var data = Convert.ToBase64String(bytes);
                         batchDocsList.Add(new BatchDocumentInfo(fileName, null, data,
-                            String.IsNullOrWhiteSpace(docType) ? null : docType, null, StartingPageTextbox.Text));
+                            String.IsNullOrWhiteSpace(docType) ? null : docType, null, StartingPageTextbox.Text,
+                            string.IsNullOrEmpty(ExternalDocIdTextbox.Text) || string.IsNullOrWhiteSpace(ExternalDocIdTextbox.Text) ? null : ExternalDocIdTextbox.Text));
                         //DocumentsTextbox.Text += $"\n{sequence}. {docType} -> {fileName} -> dataStream";
                         //if (!string.IsNullOrWhiteSpace(StartingPageTextbox.Text))
                         //{
@@ -149,6 +157,12 @@ namespace WebApiTester
                         {
                             item += " -> startingPage: " + StartingPageTextbox.Text;
                         }
+
+                        if (!string.IsNullOrWhiteSpace(ExternalDocIdTextbox.Text) &&
+                            !string.IsNullOrEmpty(ExternalDocIdTextbox.Text))
+                        {
+                           item += " -> externalDocumentId: " + ExternalDocIdTextbox.Text;
+                        }
                         textBoxList.Add(item);
                         sequence++;
                         RebuildDocumentTextBox();
@@ -156,6 +170,7 @@ namespace WebApiTester
                     }
                 }
 
+                ExternalDocIdTextbox.Text = string.Empty;
             }
         }
 
@@ -233,6 +248,7 @@ namespace WebApiTester
 
 
                 var batchDocs = batchDocsList.ToArray();
+                var externalBatchId = ExternalBatchIdTextBox.Text;
 
                 BatchCreateInfo batchCreateInfo = string.IsNullOrWhiteSpace(PriorityTextBox.Text) ?
                     new BatchCreateInfo(
@@ -247,6 +263,15 @@ namespace WebApiTester
                     RunIDTextbox.Text,
                     batchDocs.Length == 0 ? null : batchDocs
                     );
+
+                if (!string.IsNullOrEmpty(externalBatchId) && !string.IsNullOrWhiteSpace(externalBatchId))
+                {
+                   batchCreateInfo.externalBatchId = externalBatchId;
+                }
+                else
+                {
+                   batchCreateInfo.externalBatchId = null;
+                }
 
                 StatusLabel.Content = "Creating Batch...";
 
