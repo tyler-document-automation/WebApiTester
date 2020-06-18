@@ -293,6 +293,7 @@ namespace WebApiTester
                             $"Batch ID: {BatchID} successfully created for batch {batchCreateInfo.name}."
                             + Environment.NewLine
                             + JValue.Parse(result).ToString(Formatting.Indented);
+                        ExternalBatchIdTextBox.Text = "";
                         StatusLabel.Content = $"Batch ID: {BatchID} successfully created";
                     }
                     else
