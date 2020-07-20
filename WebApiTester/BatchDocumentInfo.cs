@@ -12,7 +12,7 @@
             this.docType = docType;
             this.filerData = filerData;
             this.startingPage = startingPage;
-            externalDocumentId = externalDocId;
+            externalId = externalDocId;
         }
 
         #endregion
@@ -34,8 +34,7 @@
         /// <summary>
         /// User generated document id
         /// </summary>
-        public string externalDocumentId { get; set; }
-
+        public string externalId { get; set; }
         #endregion
     }
 }

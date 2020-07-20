@@ -62,8 +62,12 @@
         /// <summary>
         /// User generated batch id
         /// </summary>
-        public string externalBatchId { get; set; }
-        
+        public string externalId { get; set; }
+
+        /// <summary>
+        /// User data for the batch
+        /// </summary>
+        public string userData { get; set; }
         #endregion
     }
 }
