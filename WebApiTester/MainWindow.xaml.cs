@@ -115,6 +115,8 @@ namespace WebApiTester
                 SetupWebClient(url, false, false);
                 try
                 {
+                    DateTime start = DateTime.Now;
+
                     HttpResponseMessage response = await client.GetAsync($"api/Batch/Retrieve/{batchID}?" +
                                                                          $"noRedaction={!includeRedaction}&" +
                                                                          $"noExtraction={!includeExtraction}&" +
@@ -123,6 +125,9 @@ namespace WebApiTester
                                                                          $"fileStream={includeStream}&" +
                                                                          $"noFiles={!includeFileReleaseData}");
                     result = await response.Content.ReadAsStringAsync();
+                    DateTime end = DateTime.Now;
+                    var elaspseTime = Math.Round((end - start).TotalSeconds, 3).ToString();
+                    WebApiResponseLabel.Content = $"(WebApi took {elaspseTime} s)";
                     if (response.IsSuccessStatusCode)
                     {
                         if (includeStream)
@@ -227,11 +232,19 @@ namespace WebApiTester
 
                 try
                 {
+                    DateTime start = DateTime.Now;
                     var requestUrl = $"api/Batch/Status?workflowId={workflowId}&state={state}" + batchIdUrl;
                     HttpResponseMessage response = await client.GetAsync(requestUrl);
+
                     result = await response.Content.ReadAsStringAsync();
+                    DateTime end = DateTime.Now;
+                    var elaspseTime = Math.Round((end - start).TotalSeconds, 3).ToString();
+                    WebApiResponseLabel.Content = $"(WebApi took {elaspseTime} s)";
                     if (response.IsSuccessStatusCode)
                     {
+                       
+                        //NoticeTextbox.Text = $"WebApi took {elaspseTime} ms. /n" + result;
+                       
                         NoticeTextbox.Text = JValue.Parse(result).ToString(Formatting.Indented);
                     }
                     else
@@ -265,12 +278,17 @@ namespace WebApiTester
                 SetupWebClient(url, false, false);
                 try
                 {
+                    DateTime start = DateTime.Now;
+
                     var param = JsonConvert.SerializeObject(new {rejectReason = RejectReasonTextbox.Text});
                     HttpContent contentPost = new StringContent(param, Encoding.UTF8, "application/json");
 
 
                     HttpResponseMessage response = await client.PostAsync($"api/Batch/Cancel/{batchID}", contentPost);
                     result = await response.Content.ReadAsStringAsync();
+                    DateTime end = DateTime.Now;
+                    var elaspseTime = Math.Round((end - start).TotalSeconds, 3).ToString();
+                    WebApiResponseLabel.Content = $"(WebApi took {elaspseTime} s)";
                     if (response.IsSuccessStatusCode)
                     {
                         NoticeTextbox.Text = JValue.Parse(result).ToString(Formatting.Indented);
@@ -324,10 +342,14 @@ namespace WebApiTester
                 SetupWebClient(url, false, false);
                 try
                 {
-                    var param = JsonConvert.SerializeObject(new {rejectReason = RejectReasonTextbox.Text});
+                    DateTime start = DateTime.Now;
 
+                    var param = JsonConvert.SerializeObject(new {rejectReason = RejectReasonTextbox.Text});
                     HttpResponseMessage response = await client.PostAsync($"api/Batch/Archive/{batchID}", null);
                     result = await response.Content.ReadAsStringAsync();
+                    DateTime end = DateTime.Now;
+                    var elaspseTime = Math.Round((end - start).TotalSeconds, 3).ToString();
+                    WebApiResponseLabel.Content = $"(WebApi took {elaspseTime} s)";
                     if (response.IsSuccessStatusCode)
                     {
                         NoticeTextbox.Text = JValue.Parse(result).ToString(Formatting.Indented);

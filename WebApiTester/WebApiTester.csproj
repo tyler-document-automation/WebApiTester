@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0CFF97A0-78FC-419D-BEFE-182B141409D9}</ProjectGuid>
+    <ProjectGuid>{79C43540-7A8A-4A4D-AD0B-89FCAF45C371}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>WebApiTester</RootNamespace>
     <AssemblyName>WebApiTester</AssemblyName>

@@ -32,7 +32,7 @@
         <TextBox x:Name ="BatchIDTextbox" HorizontalAlignment="Left" Height="23" Margin="432,105,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="393" TabIndex="5"/>
         <TextBox x:Name ="NoticeTextbox"  VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="354" Margin="432,155,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="393"/>
         <Label Content="BatchID(s):" HorizontalAlignment="Left" Margin="432,79,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.075,0.109" Height="26" Width="72"/>
-        <Label Content="Result:" HorizontalAlignment="Left" Margin="432,124,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.807,0.449" Height="26" Width="48"/>
+        <Label Content="Result:" HorizontalAlignment="Left" Margin="432,126,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.807,0.449" Height="26" Width="48"/>
         <Label Content="Reason (Required):" Margin="66,413,657,0" VerticalAlignment="Top" RenderTransformOrigin="-0.807,0.449" Height="25"/>
         <Label Content="Web API" HorizontalAlignment="Left" Margin="64,14,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.162,0.66" Height="26" Width="55"/>
         <TextBox x:Name ="WebApiTextbox" HorizontalAlignment="Left" Height="23" Margin="144,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="523" TextChanged="WebApiTextbox_TextChanged" TabIndex="1"/>
@@ -47,6 +47,7 @@
 
         <CheckBox x:Name ="SavePackageCheckBox" Content="Download Package" IsEnabled="{Binding ElementName=IncludeFileReleaseDataCheckBox, Path=IsChecked}" HorizontalAlignment="Left" Margin="267,215,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.587,-1.044"/>
         <TextBox x:Name ="ApiKeyTextbox" HorizontalAlignment="Left" Height="23" Margin="144,42,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="523" TextChanged="WebApiTextbox_TextChanged" TabIndex="2"/>
-
+        <Label x:Name ="WebApiResponseLabel" Content="" HorizontalAlignment="Left" Margin="481,126,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.162,0.66" Height="26" Width="315"/>
+        
     </Grid>
 </Window>
