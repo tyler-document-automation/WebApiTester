@@ -24,7 +24,7 @@ namespace WebApiTester
         private static int sequence;
         private static HttpClient client;
         private static string docType;
-        public static string selectedType = "--Document Type--";
+        private static string userData = string.Empty;
         public int uploadDocCount;
         private static List<string> textBoxList;
         public static Dictionary<string, int> BatchDefPriorityDictionary;
@@ -215,6 +215,39 @@ namespace WebApiTester
             }
         }
 
+        private void ButtonUserDataClick(object sender, RoutedEventArgs e)
+        {
+           var dlg = new OpenFileDialog
+           {
+              Filter = "Json Files (*.json)|*.json;",
+              Multiselect = false
+           };
+
+           var result = dlg.ShowDialog();
+           if (result == true)
+           {
+              var filePath = dlg.FileName;
+              var json = "";
+              using (StreamReader r = new StreamReader(filePath))
+              {
+                 json = r.ReadToEnd();
+              }
+
+              if (batchDocsList.Count != textBoxList.Count)
+              {
+                  StatusLabel.Content = "Please clear all documents and redo the upload. The attached documents do not match the records in quantity.";
+                  return;
+              }
+              // Add the userData to the batch object
+              userData = json;
+              StatusLabel.Content = "UserData added to the current batch.";
+                 //uploadDocCount--;
+              
+
+              RebuildDocumentTextBox();
+           }
+        }
+
         private void Button_CreateBatch(object sender, RoutedEventArgs e)
         {
             try
@@ -266,11 +299,20 @@ namespace WebApiTester
 
                 if (!string.IsNullOrEmpty(externalBatchId) && !string.IsNullOrWhiteSpace(externalBatchId))
                 {
-                   batchCreateInfo.externalBatchId = externalBatchId;
+                   batchCreateInfo.externalId = externalBatchId;
                 }
                 else
                 {
-                   batchCreateInfo.externalBatchId = null;
+                   batchCreateInfo.externalId = null;
+                }
+
+                if (!string.IsNullOrEmpty(userData) && !string.IsNullOrWhiteSpace(userData))
+                {
+                   batchCreateInfo.userData = userData;
+                }
+                else
+                {
+                   batchCreateInfo.userData = null;
                 }
 
                 StatusLabel.Content = "Creating Batch...";
@@ -294,6 +336,7 @@ namespace WebApiTester
                             + Environment.NewLine
                             + JValue.Parse(result).ToString(Formatting.Indented);
                         ExternalBatchIdTextBox.Text = "";
+                        userData = null;
                         StatusLabel.Content = $"Batch ID: {BatchID} successfully created";
                     }
                     else
@@ -406,5 +449,6 @@ namespace WebApiTester
                 DocumentsTextbox.Text += item;
             }
         }
-    }
+
+   }
 }
