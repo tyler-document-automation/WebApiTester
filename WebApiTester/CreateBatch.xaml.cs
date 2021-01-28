@@ -24,11 +24,11 @@ namespace WebApiTester
         private static int sequence;
         private static HttpClient client;
         private static string docType;
-        private static string userData = string.Empty;
-        public int uploadDocCount;
+        private static string batchUserData = string.Empty;
+        public int previousUploadedDocCount;
         private static List<string> textBoxList;
         public static Dictionary<string, int> BatchDefPriorityDictionary;
-
+        
         public CreateBatch()
         {
             InitializeComponent();
@@ -44,7 +44,7 @@ namespace WebApiTester
             batchDocsList = new List<BatchDocumentInfo>();
             BatchDefPriorityDictionary = new Dictionary<string, int>();
             textBoxList = new List<string>();
-            uploadDocCount = 0;
+            previousUploadedDocCount = 0;
             sequence = 1;
             var handler = new HttpClientHandler();
             handler.DefaultProxyCredentials = CredentialCache.DefaultCredentials;
@@ -94,7 +94,34 @@ namespace WebApiTester
                 StatusLabel.Content = $"Error: {ex.Message}. \nPlease double check url, api Key and parameters";
             }
         }
+        private void ButtonBatchUserDataClick(object sender, RoutedEventArgs e)
+        {
+            var dlg = new OpenFileDialog
+            {
+                Filter = "Json Files (*.json, *.txt)|*.json;*.txt|All Files|*.*",
+                Multiselect = false
+            };
 
+            var result = dlg.ShowDialog();
+            if (result == true)
+            {
+                var filePath = dlg.FileName;
+                var json = "";
+                using (StreamReader r = new StreamReader(filePath))
+                {
+                    json = r.ReadToEnd();
+                }
+
+                if (batchDocsList.Count != textBoxList.Count)
+                {
+                    StatusLabel.Content = "Please clear all documents and redo the upload. The attached documents do not match the records in quantity.";
+                    return;
+                }
+                // Add the batchUserData to the batch object
+                batchUserData = json;
+                BatchUserDataTextBox.Text = Path.GetFileName(filePath);
+            }
+        }
         private void ButtonBrowseClick(object sender, RoutedEventArgs e)
         {
             var dlg = new OpenFileDialog
@@ -108,7 +135,7 @@ namespace WebApiTester
             // Process open file dialog box results
             if (result == true)
             {
-                uploadDocCount = dlg.FileNames.Length;
+                previousUploadedDocCount = dlg.FileNames.Length;
 
                 //if (string.IsNullOrWhiteSpace(docType)) docType = BatchClassComboBox.SelectionBoxItem.ToString();
                 // Open document 
@@ -119,7 +146,7 @@ namespace WebApiTester
                         var fileName = Path.GetFileName(filePath);
                         batchDocsList.Add(new BatchDocumentInfo(fileName, filePath, null,
                             String.IsNullOrWhiteSpace(docType) ? null : docType, null, StartingPageTextbox.Text, 
-                            string.IsNullOrEmpty(ExternalDocIdTextbox.Text) || string.IsNullOrWhiteSpace(ExternalDocIdTextbox.Text) ? null : ExternalDocIdTextbox.Text));
+                            string.IsNullOrEmpty(ExternalDocIdTextbox.Text) || string.IsNullOrWhiteSpace(ExternalDocIdTextbox.Text) ? null : ExternalDocIdTextbox.Text, null));
                         string item = $"\n{sequence}. {docType} -> {fileName} -> filePath";
                         if (!string.IsNullOrWhiteSpace(StartingPageTextbox.Text))
                         {
@@ -145,7 +172,8 @@ namespace WebApiTester
                         var data = Convert.ToBase64String(bytes);
                         batchDocsList.Add(new BatchDocumentInfo(fileName, null, data,
                             String.IsNullOrWhiteSpace(docType) ? null : docType, null, StartingPageTextbox.Text,
-                            string.IsNullOrEmpty(ExternalDocIdTextbox.Text) || string.IsNullOrWhiteSpace(ExternalDocIdTextbox.Text) ? null : ExternalDocIdTextbox.Text));
+                            string.IsNullOrEmpty(ExternalDocIdTextbox.Text) || string.IsNullOrWhiteSpace(ExternalDocIdTextbox.Text) ? null : ExternalDocIdTextbox.Text,
+                            null));
                         //DocumentsTextbox.Text += $"\n{sequence}. {docType} -> {fileName} -> dataStream";
                         //if (!string.IsNullOrWhiteSpace(StartingPageTextbox.Text))
                         //{
@@ -196,7 +224,7 @@ namespace WebApiTester
                 }
 
                 //DocumentsTextbox.Text += filePath;
-                while (uploadDocCount != 0)
+                for (int i = 1; i <= previousUploadedDocCount; i++)
                 {
                     if (batchDocsList.Count != textBoxList.Count)
                     {
@@ -204,9 +232,8 @@ namespace WebApiTester
                         return;
                     }
 
-                    batchDocsList[batchDocsList.Count - uploadDocCount].filerData = json;
-                    textBoxList[textBoxList.Count - uploadDocCount] += " -> filerData " + Path.GetFileName(filePath);
-                    uploadDocCount--;
+                    batchDocsList[batchDocsList.Count - i].filerData = json;
+                    textBoxList[textBoxList.Count - i] += " -> filerData " + Path.GetFileName(filePath);
                 }
 
                 //batchDocsList.Last().filerData = json;
@@ -215,37 +242,45 @@ namespace WebApiTester
             }
         }
 
-        private void ButtonUserDataClick(object sender, RoutedEventArgs e)
+        
+        private void ButtonDocUserDataClick(object sender, RoutedEventArgs e)
         {
-           var dlg = new OpenFileDialog
-           {
-              Filter = "Json Files (*.json)|*.json;",
-              Multiselect = false
-           };
+            var dlg = new OpenFileDialog
+            {
+                Filter = "Json Files (*.json, *.txt)|*.json;*.txt|All Files|*.*",
+                Multiselect = false
+            };
 
-           var result = dlg.ShowDialog();
-           if (result == true)
-           {
-              var filePath = dlg.FileName;
-              var json = "";
-              using (StreamReader r = new StreamReader(filePath))
-              {
-                 json = r.ReadToEnd();
-              }
+            // Show open file dialog box
+            var result = dlg.ShowDialog();
+            // Process open file dialog box results
+            if (result == true)
+            {
+                var filePath = dlg.FileName;
+                //DocumentsTextbox.Text += "-> filerData ";
+                string json = "";
+                using (StreamReader r = new StreamReader(filePath))
+                {
+                    json = r.ReadToEnd();
+                }
 
-              if (batchDocsList.Count != textBoxList.Count)
-              {
-                  StatusLabel.Content = "Please clear all documents and redo the upload. The attached documents do not match the records in quantity.";
-                  return;
-              }
-              // Add the userData to the batch object
-              userData = json;
-              StatusLabel.Content = "UserData added to the current batch.";
-                 //uploadDocCount--;
-              
+                //DocumentsTextbox.Text += filePath;
+                for (int i = 1; i <= previousUploadedDocCount; i++)
+                {
+                    if (batchDocsList.Count != textBoxList.Count)
+                    {
+                        StatusLabel.Content = "Please clear all documents and redo the upload. Attached documents do not match the records in quantity.";
+                        return;
+                    }
 
-              RebuildDocumentTextBox();
-           }
+                    batchDocsList[batchDocsList.Count - i].userData = json;
+                    textBoxList[textBoxList.Count - i] += " -> userData " + Path.GetFileName(filePath);
+                }
+
+                //batchDocsList.Last().filerData = json;
+                RebuildDocumentTextBox();
+
+            }
         }
 
         private void Button_CreateBatch(object sender, RoutedEventArgs e)
@@ -306,9 +341,9 @@ namespace WebApiTester
                    batchCreateInfo.externalId = null;
                 }
 
-                if (!string.IsNullOrEmpty(userData) && !string.IsNullOrWhiteSpace(userData))
+                if (!string.IsNullOrEmpty(batchUserData) && !string.IsNullOrWhiteSpace(batchUserData))
                 {
-                   batchCreateInfo.userData = userData;
+                   batchCreateInfo.userData = batchUserData;
                 }
                 else
                 {
@@ -335,8 +370,6 @@ namespace WebApiTester
                             $"Batch ID: {BatchID} successfully created for batch {batchCreateInfo.name}."
                             + Environment.NewLine
                             + JValue.Parse(result).ToString(Formatting.Indented);
-                        ExternalBatchIdTextBox.Text = "";
-                        userData = null;
                         StatusLabel.Content = $"Batch ID: {BatchID} successfully created";
                     }
                     else
@@ -380,7 +413,7 @@ namespace WebApiTester
             DocumentsTextbox.Text = "Attached Documents: ";
             sequence = 1;
             textBoxList = new List<string>();
-            uploadDocCount = 0;
+            previousUploadedDocCount = 0;
             batchDocsList = new List<BatchDocumentInfo>();
         }
 
@@ -450,5 +483,10 @@ namespace WebApiTester
             }
         }
 
-   }
+        private void ClearBatchUserDataClick(object sender, RoutedEventArgs e)
+        {
+            BatchUserDataTextBox.Text = null;
+            batchUserData = null;
+        }
+    }
 }

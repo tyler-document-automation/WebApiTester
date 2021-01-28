@@ -4,7 +4,7 @@
     {
         #region Constructors
       
-        public BatchDocumentInfo(string name, string file, string data, string docType, string filerData, string startingPage, string externalDocId)
+        public BatchDocumentInfo(string name, string file, string data, string docType, string filerData, string startingPage, string externalDocId, string userData)
         {
             this.name = name;
             this.file = file;
@@ -12,7 +12,8 @@
             this.docType = docType;
             this.filerData = filerData;
             this.startingPage = startingPage;
-            externalId = externalDocId;
+            this.externalId = externalDocId;
+            this.userData = userData;
         }
 
         #endregion
@@ -35,6 +36,8 @@
         /// User generated document id
         /// </summary>
         public string externalId { get; set; }
+        public string userData { get; set; }
+
         #endregion
     }
 }
