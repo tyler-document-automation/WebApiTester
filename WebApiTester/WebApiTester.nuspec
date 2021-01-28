@@ -16,6 +16,6 @@
     <language>en-US</language>
   </metadata>
   <files>
-    <file src="bin\WebApiTester.*" target="lib\net472"/>
+    <file src="*.*" exclude="**\*.vshost.exe;**\*.vshost.exe.config;**\*.dll.config;**\*.xml;**\*.nuspec" />
   </files>
 </package>

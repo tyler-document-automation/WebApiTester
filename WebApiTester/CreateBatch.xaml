@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:WebApiTester"
       mc:Ignorable="d"
       ResizeMode="CanMinimize"
-      Title="CreateBatch" Height="778.001" Width="525.768">
+      Title="Create Batch" Height="778.001" Width="525.768">
     <Grid Margin="10,0,4,7">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>

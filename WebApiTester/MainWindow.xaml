@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:WebApiTester"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
-        Title="MainWindow" Height="611.365" Width="859.916">
+        Title="Intellidact Web API Tester" Height="611.365" Width="859.916" Icon="internet.png">
     <Grid Margin="0,0,4,4">
         <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="475" Margin="26,79,0,0" VerticalAlignment="Top" Width="814"/>
         <!--<Border Margin="44,263,488,210">
