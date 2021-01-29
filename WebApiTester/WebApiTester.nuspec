@@ -17,5 +17,6 @@
   </metadata>
   <files>
     <file src="*.*" exclude="**\*.vshost.exe;**\*.vshost.exe.config;**\*.dll.config;**\*.xml;**\*.nuspec" />
+	<file src=".\images\*" />
   </files>
 </package>
