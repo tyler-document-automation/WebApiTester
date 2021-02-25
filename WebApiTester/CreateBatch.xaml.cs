@@ -130,6 +130,8 @@ namespace WebApiTester
                 Multiselect = true
             };
 
+            docType = (DocTypeComboBox.Text??"").Trim().ToUpper();
+
             // Show open file dialog box
             var result = dlg.ShowDialog();
             // Process open file dialog box results
@@ -174,12 +176,7 @@ namespace WebApiTester
                             String.IsNullOrWhiteSpace(docType) ? null : docType, null, StartingPageTextbox.Text,
                             string.IsNullOrEmpty(ExternalDocIdTextbox.Text) || string.IsNullOrWhiteSpace(ExternalDocIdTextbox.Text) ? null : ExternalDocIdTextbox.Text,
                             null));
-                        //DocumentsTextbox.Text += $"\n{sequence}. {docType} -> {fileName} -> dataStream";
-                        //if (!string.IsNullOrWhiteSpace(StartingPageTextbox.Text))
-                        //{
-                        //    DocumentsTextbox.Text += " -> startingPage: " + StartingPageTextbox.Text;
-                        //}
-                        //
+                       
                         string item = $"\n{sequence}. {docType} -> {fileName} -> dataStream";
                         if (!string.IsNullOrWhiteSpace(StartingPageTextbox.Text))
                         {
