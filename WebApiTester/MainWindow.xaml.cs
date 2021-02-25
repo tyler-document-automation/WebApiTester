@@ -28,12 +28,30 @@ namespace WebApiTester
         public MainWindow()
         {
             InitializeComponent();
-            SetupWebClient(defaultURL, true, false);
 
+            defaultURL = Properties.Settings.Default.url;
+            WebApiTextbox.Text = defaultURL;
+            ApiKeyTextbox.Text = Properties.Settings.Default.apikey;
+            BatchIDTextbox.Text = Properties.Settings.Default.batchids;
+
+            if (string.IsNullOrWhiteSpace(defaultURL))
+            {
+                defaultURL = $"http://{Environment.MachineName}:8037/";
+                WebApiTextbox.Text = defaultURL;
+            }
+           
+            SetupWebClient(defaultURL, true, false);
         }
 
         public async void SetupWebClient(string url, bool showOkStatus, bool getWithBody)
         {
+            var apiKey = ApiKeyTextbox.Text;
+            if (string.IsNullOrWhiteSpace(apiKey))
+            {
+                ApiKeyTextbox.Focus();
+                NoticeTextbox.Text = "PROVIDE A VALID API KEY";
+                return;
+            }
 
             var handler = new HttpClientHandler
             {
@@ -43,19 +61,24 @@ namespace WebApiTester
 
             // Environment.MachineName
             WebApiTextbox.Text = client.BaseAddress.ToString();
+            ApiKeyTextbox.Text = apiKey;
+
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.TryAddWithoutValidation("api_key",
-                ((MainWindow) Application.Current.MainWindow).ApiKeyTextbox.Text);
+            client.DefaultRequestHeaders.TryAddWithoutValidation("api_key", apiKey);
 
             if (!showOkStatus) return;
+            NoticeTextbox.Text = "Waiting for response...";
             try
             {
                 HttpResponseMessage response = await client.GetAsync("/api/Batch/DefinitionNames");
                 //var result = await response.Content.ReadAsStringAsync();
                 NoticeTextbox.Text = "Status: " + response.ReasonPhrase;
 
+                Properties.Settings.Default.url = url;
+                Properties.Settings.Default.apikey = apiKey;
+                Properties.Settings.Default.Save();
             }
             catch
             {
@@ -251,6 +274,9 @@ namespace WebApiTester
                     {
                         NoticeTextbox.Text = response.ReasonPhrase + "\n" + result;
                     }
+
+                    Properties.Settings.Default.batchids = BatchIDTextbox.Text;
+                    Properties.Settings.Default.Save();
                 }
                 catch (Exception ex)
                 {

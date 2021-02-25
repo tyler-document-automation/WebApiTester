@@ -6,18 +6,18 @@
         xmlns:local="clr-namespace:WebApiTester"
         mc:Ignorable="d"
         ResizeMode="CanMinimize"
-        Title="Intellidact Web API Tester" Height="611.365" Width="859.916" Icon="internet.png">
+        Title="Intellidact Web API Tester" Height="800.597" Width="1282.049" Icon="internet.png" WindowStartupLocation="CenterScreen">
     <Grid Margin="0,0,4,4">
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="475" Margin="26,79,0,0" VerticalAlignment="Top" Width="814"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="656" Margin="26,79,0,0" VerticalAlignment="Top" Width="1222"/>
         <!--<Border Margin="44,263,488,210">
             <Grid Margin="0,-10,0,10">
                 <Rectangle Fill="#FFF4F4F5" Stroke="Black" Margin="0,0,0,94"/>
 
             </Grid>
         </Border>-->
-        <Rectangle Fill="#FFF4F4F5" Stroke="Black" Margin="43,147,436,322"/>
+        <Rectangle Fill="#FFF4F4F5" Stroke="Black" Margin="43,147,54,322"/>
         <Rectangle Fill="#FFF4F4F5" Stroke="Black" Margin="43,261,436,228"/>
-        <Rectangle Fill="#FFF4F4F5" Stroke="Black" Margin="43,370,436,119"/>
+        <Rectangle Fill="#FFF4F4F5" Stroke="Black" Margin="43,370,54,46"/>
 
         <TextBox x:Name ="StateTextbox" HorizontalAlignment="Left" Height="22" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="89" Margin="299,309,0,0"/>
         <TextBox x:Name ="WorkflowTextbox" HorizontalAlignment="Left" Height="22" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="67" Margin="137,310,0,0"/>
@@ -25,20 +25,19 @@
         <Label Content="Batch state:" HorizontalAlignment="Left" Margin="222,306,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.807,0.449" Height="24" Width="72"/>
         <Label Content="Workflow Id:" HorizontalAlignment="Left" Margin="55,307,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.807,0.449" Height="24" Width="83"/>
         <TextBox x:Name ="RejectReasonTextbox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="200" Margin="188,413,0,0"/>
-        <Button Content="Create Batch" HorizontalAlignment="Left" Margin="71,105,0,0" VerticalAlignment="Top" Width="109" Click="Button_CreateBatch" Height="20" TabIndex="4"/>
+        <Button Content="Create Batch" HorizontalAlignment="Left" Margin="71,102,0,0" VerticalAlignment="Top" Width="109" Click="Button_CreateBatch" Height="23" TabIndex="4"/>
         <Button Content="Retrieve Batch" HorizontalAlignment="Left" Margin="71,160,0,0" VerticalAlignment="Top" Width="109" Click="Button_RetrieveBatch" Height="25" RenderTransformOrigin="0.495,-0.3" TabIndex="6"/>
         <Button Content="Cancel Batch" HorizontalAlignment="Left" Margin="66,388,0,0" VerticalAlignment="Top" Width="109" Click="Button_CancelBatch" Height="20"/>
-        <Button Content="Archive Batch" Margin="66,485,675,0" VerticalAlignment="Top" Click="Button_ArchiveBatch" Height="20"/>
-        <TextBox x:Name ="BatchIDTextbox" HorizontalAlignment="Left" Height="23" Margin="432,105,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="393" TabIndex="5"/>
-        <TextBox x:Name ="NoticeTextbox"  VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="354" Margin="432,155,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="393"/>
-        <Label Content="BatchID(s):" HorizontalAlignment="Left" Margin="432,79,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.075,0.109" Height="26" Width="72"/>
-        <Label Content="Result:" HorizontalAlignment="Left" Margin="432,126,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.807,0.449" Height="26" Width="48"/>
-        <Label Content="Reason (Required):" Margin="66,413,657,0" VerticalAlignment="Top" RenderTransformOrigin="-0.807,0.449" Height="25"/>
-        <Label Content="Web API" HorizontalAlignment="Left" Margin="64,14,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.162,0.66" Height="26" Width="55"/>
-        <TextBox x:Name ="WebApiTextbox" HorizontalAlignment="Left" Height="23" Margin="144,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="523" TextChanged="WebApiTextbox_TextChanged" TabIndex="1"/>
-        <Button Content="Copy Result" HorizontalAlignment="Left" Margin="750,526,0,0" VerticalAlignment="Top" Width="75" Click="Button_Copy" Height="20" RenderTransformOrigin="0.72,2.85"/>
-        <Button Content="Test Connection" HorizontalAlignment="Left" Margin="735,15,0,0" VerticalAlignment="Top" Width="90" Click="Button_TestConnect" Height="20" TabIndex="3"/>
-        <Label Content="API Key" HorizontalAlignment="Left" Margin="64,37,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.162,0.66" Height="26" Width="55"/>
+        <Button Content="Archive Batch" Margin="59,467,1093,0" VerticalAlignment="Top" Click="Button_ArchiveBatch" Height="20"/>
+        <TextBox x:Name ="BatchIDTextbox" HorizontalAlignment="Left" Height="23" Margin="460,102,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="758" TabIndex="5"/>
+        <TextBox x:Name ="NoticeTextbox"  VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="499" Margin="460,195,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="739"/>
+        <Label Content="BatchID(s):" HorizontalAlignment="Left" Margin="383,99,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.075,0.109" Height="26" Width="72"/>
+        <Label Content="Reason (Required):" Margin="66,413,826,0" VerticalAlignment="Top" RenderTransformOrigin="-0.807,0.449" Height="25"/>
+        <Label Content="Web API" HorizontalAlignment="Left" Margin="28,14,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.162,0.66" Height="26" Width="55"/>
+        <TextBox x:Name ="WebApiTextbox" HorizontalAlignment="Left" Height="23" Margin="108,14,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="688" TextChanged="WebApiTextbox_TextChanged" TabIndex="1"/>
+        <Button Content="Copy Result" HorizontalAlignment="Left" Margin="460,160,0,0" VerticalAlignment="Top" Width="75" Click="Button_Copy" Height="20" RenderTransformOrigin="0.72,2.85"/>
+        <Button Content="Test Connection" HorizontalAlignment="Left" Margin="815,14,0,0" VerticalAlignment="Top" Width="122" Click="Button_TestConnect" Height="49" TabIndex="3"/>
+        <Label Content="API Key" HorizontalAlignment="Left" Margin="28,37,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.162,0.66" Height="26" Width="55"/>
         <CheckBox x:Name ="IncludeExtractionCheckBox" Content="Extraction" HorizontalAlignment="Left" Margin="59,195,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.587,-1.044"/>
         <CheckBox x:Name ="IncludeRedactionCheckBox" Content="Redaction" HorizontalAlignment="Left" Margin="167,195,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.587,-1.044"/>
         <CheckBox x:Name ="IncludeFileReleaseDataCheckBox" Content="File Release Data" HorizontalAlignment="Left" Margin="267,195,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.587,-1.044" Unchecked="IncludeFileReleaseDataCheckBox_UnChecked"/>
@@ -46,8 +45,8 @@
         <CheckBox x:Name ="IncludeOcrCheckBox" Content="OCR File" IsEnabled="{Binding ElementName=IncludeFileReleaseDataCheckBox, Path=IsChecked}" HorizontalAlignment="Left" Margin="167,215,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.587,-1.044"/>
 
         <CheckBox x:Name ="SavePackageCheckBox" Content="Download Package" IsEnabled="{Binding ElementName=IncludeFileReleaseDataCheckBox, Path=IsChecked}" HorizontalAlignment="Left" Margin="267,215,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.587,-1.044"/>
-        <TextBox x:Name ="ApiKeyTextbox" HorizontalAlignment="Left" Height="23" Margin="144,42,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="523" TextChanged="WebApiTextbox_TextChanged" TabIndex="2"/>
-        <Label x:Name ="WebApiResponseLabel" Content="" HorizontalAlignment="Left" Margin="481,126,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.162,0.66" Height="26" Width="315"/>
-        
+        <TextBox x:Name ="ApiKeyTextbox" HorizontalAlignment="Left" Height="23" Margin="108,42,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="688" TextChanged="WebApiTextbox_TextChanged" TabIndex="2"/>
+        <Label x:Name ="WebApiResponseLabel" Content="" HorizontalAlignment="Left" Margin="873,158,0,0" VerticalAlignment="Top" RenderTransformOrigin="-1.162,0.66" Height="26" Width="315" TextOptions.TextHintingMode="Animated" Background="{x:Null}" Foreground="#FF161ECD"/>
+
     </Grid>
 </Window>

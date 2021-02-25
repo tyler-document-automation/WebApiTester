@@ -6,14 +6,15 @@
       xmlns:local="clr-namespace:WebApiTester"
       mc:Ignorable="d"
       ResizeMode="CanMinimize"
-      Title="Create Batch" Height="778.001" Width="525.768">
+      Title="Create Batch" Height="836.422" Width="525.768">
     <Grid Margin="10,0,4,7">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="232*"/>
+            <ColumnDefinition Width="21*"/>
             <ColumnDefinition Width="0*"/>
         </Grid.ColumnDefinitions>
 
-        <Rectangle Fill="#FFF4F4F5" Stroke="Black" Margin="11,263,0,103" RenderTransformOrigin="0.506,0.538" HorizontalAlignment="Left" Width="480">
+        <Rectangle Fill="#FFF4F4F5" Stroke="Black" Margin="11,263,0,92" RenderTransformOrigin="0.506,0.538" HorizontalAlignment="Left" Width="480" Grid.ColumnSpan="2">
             <Rectangle.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -29,27 +30,28 @@
         <TextBox x:Name ="BatchNameTextbox" HorizontalAlignment="Left" Height="24" Margin="245,65,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" TextChanged="BatchNameTextbox_TextChanged" TabIndex="2"/>
         <Label Content="Run ID (optional)" HorizontalAlignment="Left" Margin="71,142,0,0" VerticalAlignment="Top" Height="27" Width="102"/>
         <TextBox x:Name ="RunIDTextbox" HorizontalAlignment="Left" Height="23" Margin="245,145,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="146" TabIndex="4"/>
-        <TextBox x:Name ="DocumentsTextbox" IsReadOnly="True" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="185" Margin="27,377,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="450"/>
-        <Button Content="Attach Document" HorizontalAlignment="Left" Margin="28,352,0,0" VerticalAlignment="Top" Width="128" Click="ButtonBrowseClick" Height="20" RenderTransformOrigin="0.668,0.425" TabIndex="9"/>
-        <Button Content="Create Batch" HorizontalAlignment="Left" Margin="171,588,0,0" VerticalAlignment="Top" Width="132" Click="Button_CreateBatch" Height="36" TabIndex="12"/>
-        <Label x:Name ="StatusLabel" Content="" HorizontalAlignment="Left" Margin="71,651,0,0" VerticalAlignment="Top" Width="378" Height="69"/>
-        <CheckBox x:Name ="FilePathCheckBox" Content="Send as file path" HorizontalAlignment="Left" Margin="245,275,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked" Width="108"/>
-        <Button Content="Clear All Documents" HorizontalAlignment="Left" Margin="359,567,0,0" VerticalAlignment="Top" Width="118" Click="ButtonClearAllDocs" Height="20" TabIndex="11"/>
+        <TextBox x:Name ="DocumentsTextbox" IsReadOnly="True" VerticalScrollBarVisibility="Visible" HorizontalAlignment="Left" Height="154" Margin="28,476,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="450" Grid.ColumnSpan="2"/>
+        <Button Content="Attach Document" HorizontalAlignment="Left" Margin="28,405,0,0" VerticalAlignment="Top" Width="128" Click="ButtonBrowseClick" Height="20" RenderTransformOrigin="0.668,0.425" TabIndex="9"/>
+        <Button Content="Create Batch" HorizontalAlignment="Left" Margin="28,648,0,0" VerticalAlignment="Top" Width="132" Click="Button_CreateBatch" Height="36" TabIndex="12"/>
+        <Label x:Name ="StatusLabel" Content="" HorizontalAlignment="Left" Margin="71,712,0,0" VerticalAlignment="Top" Width="378" Height="69" FontWeight="Bold" FontSize="14"/>
+        <CheckBox x:Name ="FilePathCheckBox" Content="Send as file path" HorizontalAlignment="Left" Margin="31,443,0,0" VerticalAlignment="Top" Checked="CheckBox_Checked" Width="108"/>
+        <Button Content="Clear All Documents" HorizontalAlignment="Left" Margin="327,443,0,0" VerticalAlignment="Top" Width="150" Click="ButtonClearAllDocs" Height="20" TabIndex="11" Grid.ColumnSpan="2"/>
         <ComboBox x:Name ="BatchClassComboBox" Text ="--Select Batch Class--" IsEditable="True" IsReadOnly="True"  HorizontalAlignment="Left" Margin="245,25,0,0" VerticalAlignment="Top" Width="146" SelectionChanged="BatchClassComboBox_SelectionChanged" TabIndex="1"/>
-        <ComboBox x:Name ="DocTypeComboBox" Text ="Document Type" IsEditable="True" IsReadOnly="True" HorizontalAlignment="Left" Margin="28,272,0,0" VerticalAlignment="Top" Width="108" SelectedValue ="{Binding selectedType}"  ItemsSource="{Binding docTypes}" SelectionChanged="DocTypeComboBox_SelectionChanged" RenderTransformOrigin="0.787,0.795" TabIndex="6"/>
-        <Button Content="Upload FilerData" HorizontalAlignment="Left" Margin="180,352,0,0" VerticalAlignment="Top" Width="123" Click="ButtonFilerDataClick" Height="20" RenderTransformOrigin="0.668,0.425" TabIndex="10"/>
+        <ComboBox x:Name ="DocTypeComboBox" Text ="Document Type" HorizontalAlignment="Left" Margin="240,278,0,0" VerticalAlignment="Top" Width="237" SelectedValue ="{Binding selectedType}"  ItemsSource="{Binding docTypes}" SelectionChanged="DocTypeComboBox_SelectionChanged" RenderTransformOrigin="0.787,0.795" TabIndex="6" Grid.ColumnSpan="2"/>
+        <Button Content="Upload FilerData" HorizontalAlignment="Left" Margin="180,405,0,0" VerticalAlignment="Top" Width="123" Click="ButtonFilerDataClick" Height="20" RenderTransformOrigin="0.668,0.425" TabIndex="10"/>
         <Label Content="Priority (optional: 0~10)" HorizontalAlignment="Left" Margin="71,102,0,0" VerticalAlignment="Top" Height="25" Width="139"/>
         <TextBox x:Name ="PriorityTextBox" HorizontalAlignment="Left" Height="24" Margin="245,105,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" TabIndex="3"/>
-        <Label Content="Starting Page (optional):" HorizontalAlignment="Left" Margin="28,307,0,0" VerticalAlignment="Top" Height="27" Width="140"/>
-        <TextBox x:Name ="StartingPageTextbox" HorizontalAlignment="Left" Height="22" Margin="163,310,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="64" TabIndex="7"/>
+        <Label Content="Starting Page (optional):" HorizontalAlignment="Left" Margin="28,360,0,0" VerticalAlignment="Top" Height="27" Width="140"/>
+        <TextBox x:Name ="StartingPageTextbox" HorizontalAlignment="Left" Height="22" Margin="240,365,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="237" TabIndex="7" Grid.ColumnSpan="2"/>
         <Label Content="External Batch ID (optional)" HorizontalAlignment="Left" Height="29" Margin="71,182,0,0" VerticalAlignment="Top" Width="155"/>
         <TextBox x:Name="ExternalBatchIdTextBox" HorizontalAlignment="Left" Height="22" Margin="245,185,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" TabIndex="5"/>
-        <Label Content="External Document ID (optional):" HorizontalAlignment="Left" Margin="243,308,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="ExternalDocIdTextbox" HorizontalAlignment="Left" Height="22" Margin="423,310,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="63" TabIndex="8"/>
+        <Label Content="External Document ID (optional):" HorizontalAlignment="Left" Margin="28,323,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="ExternalDocIdTextbox" HorizontalAlignment="Left" Height="22" Margin="240,327,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="237" TabIndex="8" Grid.ColumnSpan="2"/>
         <Button Content="Upload Batch UserData" HorizontalAlignment="Left" Height="20" Margin="73,225,0,0" VerticalAlignment="Top" Width="162" Click="ButtonBatchUserDataClick"/>
-        <Button Content="Upload Document UserData" HorizontalAlignment="Left" Height="20" Margin="327,352,0,0" VerticalAlignment="Top" Width="155" Click="ButtonDocUserDataClick"/>
+        <Button Content="Upload Document UserData" HorizontalAlignment="Left" Height="20" Margin="324,405,0,0" VerticalAlignment="Top" Width="155" Click="ButtonDocUserDataClick" Grid.ColumnSpan="2"/>
         <TextBox x:Name="BatchUserDataTextBox" HorizontalAlignment="Left" Height="22" Margin="245,223,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="146" TabIndex="5"/>
         <Button Content="Clear" HorizontalAlignment="Left" Height="20" Margin="396,223,0,0" VerticalAlignment="Top" Width="46" Click="ClearBatchUserDataClick"/>
+        <Label Content="Select Document Type" HorizontalAlignment="Left" Margin="28,282,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 

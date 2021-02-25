@@ -444,7 +444,7 @@ namespace WebApiTester
                     this.DocTypeComboBox.Items.Clear();
                     this.DocTypeComboBox.Items.Refresh();
                     //this.DocTypeComboBox.Text = docDefNames.FirstOrDefault();
-                    foreach (var item in docDefNames)
+                    foreach (var item in docDefNames.OrderBy(x=>x))
                     {
                         this.DocTypeComboBox.Items.Add(item); //this.DocTypeComboBox.Items.Add(new ComboBoxItem { Content = item });
                     }
@@ -454,7 +454,8 @@ namespace WebApiTester
                     DocTypeComboBox.SelectedValue = null;
                     DocTypeComboBox.SelectedValuePath = "";
                     this.DocTypeComboBox.SelectedItem = null;
-                    this.DocTypeComboBox.Text = "Document Type";
+                    this.DocTypeComboBox.Text = "";
+                    this.DocTypeComboBox.IsEditable = true;
                     docType = "";
                 }
             }
@@ -468,7 +469,12 @@ namespace WebApiTester
 
         private void DocTypeComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            docType = DocTypeComboBox.SelectedItem.ToString();
+            if(DocTypeComboBox.SelectedItem !=null)
+                docType = DocTypeComboBox.SelectedItem.ToString();
+            else
+            {
+                docType = "";
+            }
         }
 
 
