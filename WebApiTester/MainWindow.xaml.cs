@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Windows;
@@ -33,6 +34,8 @@ namespace WebApiTester
             WebApiTextbox.Text = defaultURL;
             ApiKeyTextbox.Text = Properties.Settings.Default.apikey;
             BatchIDTextbox.Text = Properties.Settings.Default.batchids;
+            MaxItemsTextbox.Text = Properties.Settings.Default.maxItems.ToString();
+            AllDataCheckBox.IsChecked = Properties.Settings.Default.alldata;
 
             if (string.IsNullOrWhiteSpace(defaultURL))
             {
@@ -49,7 +52,8 @@ namespace WebApiTester
             if (string.IsNullOrWhiteSpace(apiKey))
             {
                 ApiKeyTextbox.Focus();
-                NoticeTextbox.Text = "PROVIDE A VALID API KEY";
+                WebApiStatus.Text = "No API key";
+                MessageBox.Show("PROVIDE A VALID API KEY", this.Title);
                 return;
             }
 
@@ -69,21 +73,18 @@ namespace WebApiTester
             client.DefaultRequestHeaders.TryAddWithoutValidation("api_key", apiKey);
 
             if (!showOkStatus) return;
-            NoticeTextbox.Text = "Waiting for response...";
+            var sw = CallApiStart();
+            
             try
             {
                 HttpResponseMessage response = await client.GetAsync("/api/Batch/DefinitionNames");
-                //var result = await response.Content.ReadAsStringAsync();
-                NoticeTextbox.Text = "Status: " + response.ReasonPhrase;
-
-                Properties.Settings.Default.url = url;
-                Properties.Settings.Default.apikey = apiKey;
-                Properties.Settings.Default.Save();
+                CallApiEnd(sw);
+                WebApiStatus.Text = response.ReasonPhrase;
             }
             catch
             {
+                CallApiEnd();
                 NoticeTextbox.Text = "Failed to establish connection with web api. \nPlease double check url.";
-                //throw new Exception("Failed to establish connection with web api. \nPlease double check url");
             }
         }
 
@@ -138,8 +139,8 @@ namespace WebApiTester
                 SetupWebClient(url, false, false);
                 try
                 {
-                    DateTime start = DateTime.Now;
-
+                    WebApiStatus.Text = "Processing...";
+                    var sw = CallApiStart();
                     HttpResponseMessage response = await client.GetAsync($"api/Batch/Retrieve/{batchID}?" +
                                                                          $"noRedaction={!includeRedaction}&" +
                                                                          $"noExtraction={!includeExtraction}&" +
@@ -148,9 +149,8 @@ namespace WebApiTester
                                                                          $"fileStream={includeStream}&" +
                                                                          $"noFiles={!includeFileReleaseData}");
                     result = await response.Content.ReadAsStringAsync();
-                    DateTime end = DateTime.Now;
-                    var elaspseTime = Math.Round((end - start).TotalSeconds, 3).ToString();
-                    WebApiResponseLabel.Content = $"(WebApi took {elaspseTime} s)";
+                    CallApiEnd(sw);
+
                     if (response.IsSuccessStatusCode)
                     {
                         if (includeStream)
@@ -199,6 +199,7 @@ namespace WebApiTester
                 }
                 catch (Exception ex)
                 {
+                    CallApiEnd();
                     NoticeTextbox.Text = $"Error: {ex.Message}. \nPlease double check url, api Key and parameters";
                 }
             }
@@ -230,7 +231,8 @@ namespace WebApiTester
 
                 string workflow = WorkflowTextbox.Text;
                 string state = StateTextbox.Text;
-
+                string maxItems = MaxItemsTextbox.Text;
+                bool allData = AllDataCheckBox.IsChecked??true;
                 //string batchIdParams = JsonConvert.SerializeObject(intBatchIds);
                 int workflowId = 0;
 
@@ -255,19 +257,15 @@ namespace WebApiTester
 
                 try
                 {
-                    DateTime start = DateTime.Now;
-                    var requestUrl = $"api/Batch/Status?workflowId={workflowId}&state={state}" + batchIdUrl;
+                    var sw = CallApiStart();
+                    var requestUrl = $"api/Batch/Status?workflowId={workflowId}&state={state}&maxitems={maxItems}&alldata={allData}" + batchIdUrl;
                     HttpResponseMessage response = await client.GetAsync(requestUrl);
 
                     result = await response.Content.ReadAsStringAsync();
-                    DateTime end = DateTime.Now;
-                    var elaspseTime = Math.Round((end - start).TotalSeconds, 3).ToString();
-                    WebApiResponseLabel.Content = $"(WebApi took {elaspseTime} s)";
+                    CallApiEnd(sw);
+                    WebApiResponseLabel.Text = $"{sw.ElapsedMilliseconds} ms";
                     if (response.IsSuccessStatusCode)
                     {
-                       
-                        //NoticeTextbox.Text = $"WebApi took {elaspseTime} ms. /n" + result;
-                       
                         NoticeTextbox.Text = JValue.Parse(result).ToString(Formatting.Indented);
                     }
                     else
@@ -280,6 +278,7 @@ namespace WebApiTester
                 }
                 catch (Exception ex)
                 {
+                    CallApiEnd();
                     NoticeTextbox.Text = $"Error: {ex.Message}. \nPlease double check url, api Key and parameters";
                 }
             }
@@ -304,17 +303,14 @@ namespace WebApiTester
                 SetupWebClient(url, false, false);
                 try
                 {
-                    DateTime start = DateTime.Now;
-
+                    var sw = CallApiStart();
                     var param = JsonConvert.SerializeObject(new {rejectReason = RejectReasonTextbox.Text});
                     HttpContent contentPost = new StringContent(param, Encoding.UTF8, "application/json");
-
-
                     HttpResponseMessage response = await client.PostAsync($"api/Batch/Cancel/{batchID}", contentPost);
                     result = await response.Content.ReadAsStringAsync();
-                    DateTime end = DateTime.Now;
-                    var elaspseTime = Math.Round((end - start).TotalSeconds, 3).ToString();
-                    WebApiResponseLabel.Content = $"(WebApi took {elaspseTime} s)";
+                    
+                    CallApiEnd(sw);
+
                     if (response.IsSuccessStatusCode)
                     {
                         NoticeTextbox.Text = JValue.Parse(result).ToString(Formatting.Indented);
@@ -326,6 +322,7 @@ namespace WebApiTester
                 }
                 catch (Exception ex)
                 {
+                    CallApiEnd();
                     NoticeTextbox.Text = $"Error: {ex.Message}. \nPlease double check url, api Key and parameters";
                 }
             }
@@ -368,14 +365,14 @@ namespace WebApiTester
                 SetupWebClient(url, false, false);
                 try
                 {
-                    DateTime start = DateTime.Now;
-
+                    var sw = CallApiStart();
                     var param = JsonConvert.SerializeObject(new {rejectReason = RejectReasonTextbox.Text});
+                    
                     HttpResponseMessage response = await client.PostAsync($"api/Batch/Archive/{batchID}", null);
                     result = await response.Content.ReadAsStringAsync();
-                    DateTime end = DateTime.Now;
-                    var elaspseTime = Math.Round((end - start).TotalSeconds, 3).ToString();
-                    WebApiResponseLabel.Content = $"(WebApi took {elaspseTime} s)";
+                    
+                    CallApiEnd(sw);
+                    
                     if (response.IsSuccessStatusCode)
                     {
                         NoticeTextbox.Text = JValue.Parse(result).ToString(Formatting.Indented);
@@ -387,6 +384,7 @@ namespace WebApiTester
                 }
                 catch (Exception ex)
                 {
+                    CallApiEnd();
                     NoticeTextbox.Text = $"Error: {ex.Message}. \nPlease double check url, api Key and parameters";
                 }
             }
@@ -419,9 +417,6 @@ namespace WebApiTester
                 {
                     try
                     {
-
-                        //HttpResponseMessage response =
-                        //    await client.PostAsync($"{defaultURL}api/validation/indexing/document/suspend/{batchID}", null);
 
                         client.Headers.Add(HttpRequestHeader.ContentType, "application/json; charset=utf-8");
                         var response =
@@ -502,7 +497,33 @@ namespace WebApiTester
             }
         }
 
+        private Stopwatch CallApiStart()
+        {
+            WebApiResponseLabel.Text = "--";
+            WebApiStatus.Text = "Waiting...";
 
+            Properties.Settings.Default.url = WebApiTextbox.Text;
+            Properties.Settings.Default.apikey = ApiKeyTextbox.Text;
+            Properties.Settings.Default.maxItems = int.Parse(MaxItemsTextbox.Text);
+            Properties.Settings.Default.alldata = AllDataCheckBox.IsChecked ?? true;
+
+            Properties.Settings.Default.Save();
+
+            return Stopwatch.StartNew();
+        }
+
+        private void CallApiEnd(Stopwatch sw)
+        {
+            sw.Stop();
+            WebApiStatus.Text = "OK";
+            WebApiResponseLabel.Text = $"{sw.ElapsedMilliseconds} ms";
+        }
+
+        private void CallApiEnd()
+        {
+            WebApiStatus.Text = "[Failed]";
+            WebApiResponseLabel.Text = "--";
+        }
 
         private static string BytesToStringConverted(byte[] bytes)
         {

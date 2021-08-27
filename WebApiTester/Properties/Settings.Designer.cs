@@ -58,5 +58,65 @@ namespace WebApiTester.Properties {
                 this["apikey"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string process {
+            get {
+                return ((string)(this["process"]));
+            }
+            set {
+                this["process"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
+        public int maxItems {
+            get {
+                return ((int)(this["maxItems"]));
+            }
+            set {
+                this["maxItems"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool alldata {
+            get {
+                return ((bool)(this["alldata"]));
+            }
+            set {
+                this["alldata"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int batch_class_index {
+            get {
+                return ((int)(this["batch_class_index"]));
+            }
+            set {
+                this["batch_class_index"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string batch_name {
+            get {
+                return ((string)(this["batch_name"]));
+            }
+            set {
+                this["batch_name"] = value;
+            }
+        }
     }
 }

@@ -50,9 +50,9 @@ namespace WebApiTester
             handler.DefaultProxyCredentials = CredentialCache.DefaultCredentials;
             client = new HttpClient(handler);
             DocumentsTextbox.Text = "Attached Documents: ";
+            PriorityTextBox.ItemsSource = new int[] {10,9,8,7,6,5,4,3,2,1};
+            BatchNameTextbox.Text = Properties.Settings.Default.batch_name;
         }
-
-
 
         private void setUpWebClient()
         {
@@ -79,7 +79,17 @@ namespace WebApiTester
 
                         BatchDefPriorityDictionary.Add(item.Name, item.DefaultPriority);
                     }
+
                     BatchClassComboBox.ItemsSource = batchDefData.Select(i => i.Name).ToList();
+                    if (BatchClassComboBox.Items.Count > 0)
+                    {
+                        var index = Properties.Settings.Default.batch_class_index;
+
+                        if (BatchClassComboBox.Items.Count > index)
+                            BatchClassComboBox.SelectedIndex = index;
+                        else
+                            BatchClassComboBox.SelectedIndex = 0;
+                    }
                 }
                 else
                 {
@@ -284,6 +294,10 @@ namespace WebApiTester
         {
             try
             {
+                Properties.Settings.Default.batch_class_index = BatchClassComboBox.SelectedIndex;
+                Properties.Settings.Default.batch_name = BatchNameTextbox.Text;
+                Properties.Settings.Default.Save();
+
                 if (BatchClassComboBox.SelectedItem == null)
                 {
                     StatusLabel.Content = "Error in creating an batch. \nThe batch class name cannot be null";
