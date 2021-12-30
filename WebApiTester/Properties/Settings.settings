@@ -26,5 +26,8 @@
     <Setting Name="batch_name" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="batch_status" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Any</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

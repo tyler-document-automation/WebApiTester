@@ -213,7 +213,7 @@ namespace WebApiTester
         {
             var dlg = new OpenFileDialog
             {
-                Filter = "Json Files (*.json, *.txt)|*.json;*.txt|All Files|*.*",
+                Filter = "Json Files (*.jdat,*.json, *.txt)|*.jdat;*.json;*.txt|All Files|*.*",
                 Multiselect = false
             };
 
@@ -224,11 +224,11 @@ namespace WebApiTester
             {
                 var filePath = dlg.FileName;
                 //DocumentsTextbox.Text += "-> filerData ";
-                string json = "";
-                using (StreamReader r = new StreamReader(filePath))
-                {
-                    json = r.ReadToEnd();
-                }
+                string json = File.ReadAllText(filePath);
+                json = json.Replace("\"Row\":", "\"row\":");
+                json = json.Replace("\"Table\":", "\"table\":");
+                json = json.Replace("\"Field\":", "\"field\":");
+                json = json.Replace("\"Value\":", "\"value\":");
 
                 //DocumentsTextbox.Text += filePath;
                 for (int i = 1; i <= previousUploadedDocCount; i++)
@@ -245,7 +245,6 @@ namespace WebApiTester
 
                 //batchDocsList.Last().filerData = json;
                 RebuildDocumentTextBox();
-
             }
         }
 
@@ -286,7 +285,6 @@ namespace WebApiTester
 
                 //batchDocsList.Last().filerData = json;
                 RebuildDocumentTextBox();
-
             }
         }
 

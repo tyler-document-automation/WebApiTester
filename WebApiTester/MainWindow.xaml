@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WebApiTester"
         mc:Ignorable="d"
-        Title="Intellidact Web API Tester" Icon="internet.png" WindowStartupLocation="CenterScreen" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="5" d:DesignWidth="1476.571" d:DesignHeight="584.085" Width="1300" ScrollViewer.CanContentScroll="True" ResizeMode="CanMinimize" Height="650">
+        Title="Intellidact Web API Tester" Icon="internet.png" WindowStartupLocation="CenterScreen" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="5" d:DesignWidth="1476.571" Width="1300" ScrollViewer.CanContentScroll="True" ResizeMode="CanMinimize" Height="666">
     <Grid Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
         <Grid.RowDefinitions>
             <RowDefinition Height = "100" />
@@ -51,8 +51,8 @@
                 <TextBox x:Name ="BatchIDTextbox" TextWrapping="Wrap" Text="" VerticalAlignment="Center" TabIndex="5" DockPanel.Dock="Right"/>
             </DockPanel>
             <DockPanel>
-                <Label DockPanel.Dock="Left" Width="100">Batch state:</Label>
-                <TextBox x:Name ="StateTextbox" TextWrapping="Wrap" Text="" VerticalAlignment="Center" DockPanel.Dock="Right"/>
+                <Label DockPanel.Dock="Left" Width="100">Batch status:</Label>
+                <ComboBox x:Name ="StateTextbox" Text="" VerticalAlignment="Center" DockPanel.Dock="Right"/>
             </DockPanel>
             <DockPanel>
                 <Label Width="100" DockPanel.Dock="Left">Workflow ID:</Label>
@@ -70,21 +70,22 @@
                 </DockPanel>
             </Button>
         </StackPanel>
-        <StackPanel Grid.Column="0" Grid.Row="2" Margin="5" VerticalAlignment="Top" Background="#FFF6F6F6">
+        <StackPanel Grid.Column="0" Grid.Row="2" Margin="5,5,5,0" VerticalAlignment="Top" Background="#FFF6F6F6" Height="139" Grid.RowSpan="2">
             <CheckBox x:Name ="IncludeExtractionCheckBox" HorizontalAlignment="Left"  VerticalAlignment="Top">Extraction</CheckBox>
             <CheckBox x:Name ="IncludeRedactionCheckBox" HorizontalAlignment="Left" VerticalAlignment="Top">Redaction</CheckBox>
             <CheckBox x:Name ="IncludeFileReleaseDataCheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Unchecked="IncludeFileReleaseDataCheckBox_UnChecked">File Release Data</CheckBox>
             <CheckBox x:Name ="IncludeOrgCheckBox" IsEnabled="{Binding ElementName=IncludeFileReleaseDataCheckBox, Path=IsChecked}" HorizontalAlignment="Left"  VerticalAlignment="Top">Original File</CheckBox>
             <CheckBox x:Name ="IncludeOcrCheckBox" IsEnabled="{Binding ElementName=IncludeFileReleaseDataCheckBox, Path=IsChecked}" HorizontalAlignment="Left" VerticalAlignment="Top">OCR File</CheckBox>
             <CheckBox x:Name ="SavePackageCheckBox" IsEnabled="{Binding ElementName=IncludeFileReleaseDataCheckBox, Path=IsChecked}" HorizontalAlignment="Left" VerticalAlignment="Top">Download Package</CheckBox>
-            <Button HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top" Width="110" Click="Button_RetrieveBatch" Height="30" TabIndex="6">
+            <CheckBox x:Name ="RotatePagesCheckBox" HorizontalAlignment="Left" VerticalAlignment="Top" Content="Get Rotate Pages"/>
+            <Button HorizontalAlignment="Right" Margin="0" VerticalAlignment="Top" Width="110" Click="Button_RetrieveBatch" Height="25" TabIndex="6">
                 <DockPanel>
                     <Image Source="download_2.png" />
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Retrieve Batch</TextBlock>
                 </DockPanel>
             </Button>
         </StackPanel>
-        <StackPanel Grid.Column="0" Grid.Row="3" Margin="5" VerticalAlignment="Top">
+        <StackPanel Grid.Column="0" Grid.Row="3" Margin="5,26,5,0" VerticalAlignment="Top" Height="143">
             <DockPanel>
                 <Label DockPanel.Dock="Left">Reason (Required):</Label>
                 <TextBox x:Name ="RejectReasonTextbox" TextWrapping="Wrap" Text="" DockPanel.Dock="Right" Margin="0"/>

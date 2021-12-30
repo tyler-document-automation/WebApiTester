@@ -10,6 +10,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Serilog;
 
 namespace WebApiTester
 {
@@ -43,6 +44,22 @@ namespace WebApiTester
                 WebApiTextbox.Text = defaultURL;
             }
            
+            StateTextbox.Items.Add("Any");
+            StateTextbox.Items.Add("Completed");
+            StateTextbox.Items.Add("InFlight");
+            StateTextbox.Items.Add("Error");
+            StateTextbox.Items.Add("Cancelled");
+            StateTextbox.Items.Add("Purged");
+            StateTextbox.Items.Add("Archived");
+
+            StateTextbox.Text = Properties.Settings.Default.batch_status;
+
+            var logfile = Path.Combine(Environment.CurrentDirectory, "logs", "webapitool-.log");
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Verbose()
+                .WriteTo.File(logfile, rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
             SetupWebClient(defaultURL, true, false);
         }
 
@@ -77,6 +94,7 @@ namespace WebApiTester
             
             try
             {
+                Slog.ApiCall(client, "/api/Batch/DefinitionNames");
                 HttpResponseMessage response = await client.GetAsync("/api/Batch/DefinitionNames");
                 CallApiEnd(sw);
                 WebApiStatus.Text = response.ReasonPhrase;
@@ -118,36 +136,32 @@ namespace WebApiTester
                 }
 
 
-                var includeExtraction =
-                    IncludeExtractionCheckBox.IsChecked == true; // If set to be true, include extraction data
-
-                var includeRedaction =
-                    IncludeRedactionCheckBox.IsChecked == true; // If set to be true, include redaction data
-                var includeFileReleaseData =
-                    IncludeFileReleaseDataCheckBox.IsChecked ==
-                    true; // if file release data is true, you will see release file paths and/or stream 
-
-                var includeOrg = IncludeOrgCheckBox.IsChecked == true; // If set to be true, include original file
-
-                var includeOcr = IncludeOcrCheckBox.IsChecked == true; // If set to be true, include Ocr information
-                var includeStream =
-                    SavePackageCheckBox.IsChecked ==
-                    true; // if stream is set to true, you will save the package as a zipped file. Otherwise, display filepath only.
+                var includeExtraction = IncludeExtractionCheckBox.IsChecked??false; // If set to be true, include extraction data
+                var includeRedaction = IncludeRedactionCheckBox.IsChecked??false; // If set to be true, include redaction data
+                var includeFileReleaseData = IncludeFileReleaseDataCheckBox.IsChecked??false; // if file release data is true, you will see release file paths and/or stream 
+                var includeOrg = IncludeOrgCheckBox.IsChecked??false; // If set to be true, include original file
+                var includeOcr = IncludeOcrCheckBox.IsChecked??false; // If set to be true, include Ocr information
+                var includeStream = SavePackageCheckBox.IsChecked??false; // if stream is set to true, you will save the package as a zipped file. Otherwise, display filepath only.
+                var includeRotPages = RotatePagesCheckBox.IsChecked??false; // Retrieve rotate pages
                 string result = "";
 
                 string url = ((MainWindow) Application.Current.MainWindow).WebApiTextbox.Text;
                 SetupWebClient(url, false, false);
                 try
                 {
+                    var apiUrl = $"api/Batch/Retrieve/{batchID}?" +
+                                 $"noRedaction={includeRedaction}&" +
+                                 $"noExtraction={includeExtraction}&" +
+                                 $"noOriginalFile={includeOrg}&" +
+                                 $"noOcr={includeOcr}&" +
+                                 $"fileStream={includeStream}&" +
+                                 $"rotatePages={includeRotPages}&" +
+                                 $"noFiles={includeFileReleaseData}";
+
                     WebApiStatus.Text = "Processing...";
                     var sw = CallApiStart();
-                    HttpResponseMessage response = await client.GetAsync($"api/Batch/Retrieve/{batchID}?" +
-                                                                         $"noRedaction={!includeRedaction}&" +
-                                                                         $"noExtraction={!includeExtraction}&" +
-                                                                         $"noOriginalFile={!includeOrg}&" +
-                                                                         $"noOcr={!includeOcr}&" +
-                                                                         $"fileStream={includeStream}&" +
-                                                                         $"noFiles={!includeFileReleaseData}");
+                    Slog.ApiCall(client, apiUrl);
+                    HttpResponseMessage response = await client.GetAsync(apiUrl);
                     result = await response.Content.ReadAsStringAsync();
                     CallApiEnd(sw);
 
@@ -165,14 +179,16 @@ namespace WebApiTester
                                 File.WriteAllBytes(@path + $"\\Batch_{batchID}_Release_Package.zip", zippedPackage);
                                 FileInfo file = new FileInfo(@path + $"\\Batch_{batchID}_Release_Package.zip");
 
-                                HttpResponseMessage responseWithoutStream = await client.GetAsync(
-                                    $"api/Batch/Retrieve/{batchID}?" +
-                                    $"noRedaction={!includeRedaction}&" +
-                                    $"noExtraction={!includeExtraction}&" +
-                                    $"noOriginalFile={!includeOrg}&" +
-                                    $"noOcr={!includeOcr}&" +
-                                    "fileStream=false&" +
-                                    $"noFiles={!includeFileReleaseData}");
+                                HttpResponseMessage responseWithoutStream = await client.GetAsync(apiUrl);
+
+                                //HttpResponseMessage responseWithoutStream = await client.GetAsync(
+                                //    $"api/Batch/Retrieve/{batchID}?" +
+                                //    $"noRedaction={!includeRedaction}&" +
+                                //    $"noExtraction={!includeExtraction}&" +
+                                //    $"noOriginalFile={!includeOrg}&" +
+                                //    $"noOcr={!includeOcr}&" +
+                                //    "fileStream=false&" +
+                                //    $"noFiles={!includeFileReleaseData}");
                                 var resultWithoutStream = await responseWithoutStream.Content.ReadAsStringAsync();
 
 
@@ -259,6 +275,7 @@ namespace WebApiTester
                 {
                     var sw = CallApiStart();
                     var requestUrl = $"api/Batch/Status?workflowId={workflowId}&state={state}&maxitems={maxItems}&alldata={allData}" + batchIdUrl;
+                    Slog.ApiCall(client, requestUrl);
                     HttpResponseMessage response = await client.GetAsync(requestUrl);
 
                     result = await response.Content.ReadAsStringAsync();
@@ -305,8 +322,11 @@ namespace WebApiTester
                 {
                     var sw = CallApiStart();
                     var param = JsonConvert.SerializeObject(new {rejectReason = RejectReasonTextbox.Text});
+                    var apiUrl = $"api/Batch/Cancel/{batchID}";
+                    Slog.ApiCall(client, apiUrl, "POST", param);
+
                     HttpContent contentPost = new StringContent(param, Encoding.UTF8, "application/json");
-                    HttpResponseMessage response = await client.PostAsync($"api/Batch/Cancel/{batchID}", contentPost);
+                    HttpResponseMessage response = await client.PostAsync(apiUrl, contentPost);
                     result = await response.Content.ReadAsStringAsync();
                     
                     CallApiEnd(sw);
@@ -367,8 +387,10 @@ namespace WebApiTester
                 {
                     var sw = CallApiStart();
                     var param = JsonConvert.SerializeObject(new {rejectReason = RejectReasonTextbox.Text});
-                    
-                    HttpResponseMessage response = await client.PostAsync($"api/Batch/Archive/{batchID}", null);
+                    var apiUrl = $"api/Batch/Archive/{batchID}";
+                    Slog.ApiCall(client, apiUrl, "POST", param);
+
+                    HttpResponseMessage response = await client.PostAsync(apiUrl, null);
                     result = await response.Content.ReadAsStringAsync();
                     
                     CallApiEnd(sw);
@@ -396,107 +418,7 @@ namespace WebApiTester
             IncludeOrgCheckBox.IsChecked = false;
             SavePackageCheckBox.IsChecked = false;
         }
-
-       
-
-        private async void Button_CloseBatchIndexing(object sender, RoutedEventArgs e)
-        {
-            using (new WaitCursor())
-            {
-                int batchId = 0;
-                bool canConvert = int.TryParse(BatchIDTextbox.Text, out batchId);
-                if (!canConvert)
-                {
-                    NoticeTextbox.Text = "The input BatchID is not a valid integer.";
-                    return;
-                }
-                string result = "";
-
-                string url = ((MainWindow)Application.Current.MainWindow).WebApiTextbox.Text;
-                using (var client = new WebClient { UseDefaultCredentials = true })
-                {
-                    try
-                    {
-
-                        client.Headers.Add(HttpRequestHeader.ContentType, "application/json; charset=utf-8");
-                        var response =
-                            client.UploadData($"{url}/api/validation/indexing/batch/close/{batchId}", "POST",
-                                new byte[0]);
-
-                        NoticeTextbox.Text = "Batch closed successfully. " + BytesToStringConverted(response);
-                    }
-                    catch (WebException exception)
-                    {
-                        string responseText = null;
-
-                        var responseStream = exception.Response?.GetResponseStream();
-
-                        if (responseStream != null)
-                        {
-                            using (var reader = new StreamReader(responseStream))
-                            {
-                                responseText = reader.ReadToEnd();
-                            }
-                        }
-
-                        NoticeTextbox.Text =
-                            $"Error: {responseText}. \nPlease double check url, api Key and parameters";
-                    }
-                }
-            }
-        }
-
         
-
-        private async void Button_CloseBatchRedaction(object sender, RoutedEventArgs e)
-        {
-            using (new WaitCursor())
-            {
-                int batchId = 0;
-                bool canConvert = int.TryParse(BatchIDTextbox.Text, out batchId);
-                if (!canConvert)
-                {
-                    NoticeTextbox.Text = "The input BatchID is not a valid integer.";
-                    return;
-                }
-                string result = "";
-
-                //string url = ((MainWindow)Application.Current.MainWindow).WebApiTextbox.Text;
-                string url = "http://indexingdev:8037/";
-
-                using (var client = new WebClient { UseDefaultCredentials = true })
-                {
-                    try
-                    {
-
-                        client.Headers.Add(HttpRequestHeader.ContentType, "application/json; charset=utf-8");
-                        var response =
-                            client.UploadData($"{url}/api/validation/redaction/batch/close/{batchId}", "POST",
-                                new byte[0]);
-
-                        NoticeTextbox.Text = "Batch closed successfully. " + BytesToStringConverted(response);
-                    }
-                    catch (WebException exception)
-                    {
-                        string responseText = null;
-
-                        var responseStream = exception.Response?.GetResponseStream();
-
-                        if (responseStream != null)
-                        {
-                            using (var reader = new StreamReader(responseStream))
-                            {
-                                responseText = reader.ReadToEnd();
-                            }
-                        }
-
-                        NoticeTextbox.Text =
-                            $"Error: {responseText}. \nPlease double check url, api Key and parameters";
-                    }
-                }
-            }
-        }
-
         private Stopwatch CallApiStart()
         {
             WebApiResponseLabel.Text = "--";
@@ -506,6 +428,7 @@ namespace WebApiTester
             Properties.Settings.Default.apikey = ApiKeyTextbox.Text;
             Properties.Settings.Default.maxItems = int.Parse(MaxItemsTextbox.Text);
             Properties.Settings.Default.alldata = AllDataCheckBox.IsChecked ?? true;
+            Properties.Settings.Default.batch_status = StateTextbox.Text;
 
             Properties.Settings.Default.Save();
 
@@ -537,20 +460,6 @@ namespace WebApiTester
                 }
             }
         }
-        private async void Button_SuspendBatch2(object sender, RoutedEventArgs e)
-        {
-
-            HttpWebRequest request = (HttpWebRequest) HttpWebRequest.Create("http://myapp/home.aspx");
-
-            request.Method = "GET";
-            request.UseDefaultCredentials = false;
-            request.PreAuthenticate = true;
-            request.Credentials = new NetworkCredential("username", "password", "domain");
-
-            HttpWebResponse response = (HttpWebResponse) request.GetResponse(); // Raises Unauthorized Exception}
-
-        }
-
+        
     }
-
 }
