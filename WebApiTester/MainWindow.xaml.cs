@@ -99,10 +99,10 @@ namespace WebApiTester
                 CallApiEnd(sw);
                 WebApiStatus.Text = response.ReasonPhrase;
             }
-            catch
+            catch (Exception e)
             {
                 CallApiEnd();
-                NoticeTextbox.Text = "Failed to establish connection with web api. \nPlease double check url.";
+                NoticeTextbox.Text = $"Failed to establish connection with web api. \nPlease double check url.\r\n{e.Message}\r\n{e.StackTrace}";
             }
         }
 
@@ -379,6 +379,20 @@ namespace WebApiTester
                     return;
                 }
 
+                string[] ids = null;
+                using(var dlg = new OlDocumentsWindow())
+                {
+                    var dresult = dlg.ShowDialog();
+                    if ( dresult == System.Windows.Forms.DialogResult.OK )
+                    {
+                        ids = dlg.IntellidactIDs;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+
                 string result = "";
 
                 string url = ((MainWindow) Application.Current.MainWindow).WebApiTextbox.Text;
@@ -386,11 +400,19 @@ namespace WebApiTester
                 try
                 {
                     var sw = CallApiStart();
-                    var param = JsonConvert.SerializeObject(new {rejectReason = RejectReasonTextbox.Text});
+                    string param = null;
+                    HttpContent contentPost = null;
+                    if (ids.Length > 0)
+                    {
+                        param = JsonConvert.SerializeObject(ids);
+                        contentPost = new StringContent(param, Encoding.UTF8, "application/json");
+                    }
+                    
+
                     var apiUrl = $"api/Batch/Archive/{batchID}";
                     Slog.ApiCall(client, apiUrl, "POST", param);
-
-                    HttpResponseMessage response = await client.PostAsync(apiUrl, null);
+                                        
+                    HttpResponseMessage response = await client.PostAsync(apiUrl, contentPost);
                     result = await response.Content.ReadAsStringAsync();
                     
                     CallApiEnd(sw);

@@ -91,6 +91,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BatchDefinitionData.cs" />
+    <Compile Include="OlDocumentsWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OlDocumentsWindow.Designer.cs">
+      <DependentUpon>OlDocumentsWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Slog.cs" />
     <Compile Include="WaitCursor.cs" />
     <Page Include="CreateBatch.xaml">
@@ -129,6 +135,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="OlDocumentsWindow.resx">
+      <DependentUpon>OlDocumentsWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
