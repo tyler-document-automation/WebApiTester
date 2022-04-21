@@ -150,13 +150,13 @@ namespace WebApiTester
                 try
                 {
                     var apiUrl = $"api/Batch/Retrieve/{batchID}?" +
-                                 $"noRedaction={includeRedaction}&" +
-                                 $"noExtraction={includeExtraction}&" +
-                                 $"noOriginalFile={includeOrg}&" +
-                                 $"noOcr={includeOcr}&" +
+                                 $"noRedaction={!includeRedaction}&" +
+                                 $"noExtraction={!includeExtraction}&" +
+                                 $"noOriginalFile={!includeOrg}&" +
+                                 $"noOcr={!includeOcr}&" +
                                  $"fileStream={includeStream}&" +
                                  $"rotatePages={includeRotPages}&" +
-                                 $"noFiles={includeFileReleaseData}";
+                                 $"noFiles={!includeFileReleaseData}";
 
                     WebApiStatus.Text = "Processing...";
                     var sw = CallApiStart();
