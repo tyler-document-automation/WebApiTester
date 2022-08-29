@@ -97,6 +97,7 @@
     <Compile Include="OlDocumentsWindow.Designer.cs">
       <DependentUpon>OlDocumentsWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="Slog.cs" />
     <Compile Include="WaitCursor.cs" />
     <Page Include="CreateBatch.xaml">

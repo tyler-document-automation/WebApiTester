@@ -37,6 +37,7 @@ namespace WebApiTester
             BatchIDTextbox.Text = Properties.Settings.Default.batchids;
             MaxItemsTextbox.Text = Properties.Settings.Default.maxItems.ToString();
             AllDataCheckBox.IsChecked = Properties.Settings.Default.alldata;
+            tbIntellidactId.Text = Properties.Settings.Default.intellidactid;
 
             if (string.IsNullOrWhiteSpace(defaultURL))
             {
@@ -482,6 +483,46 @@ namespace WebApiTester
                 }
             }
         }
-        
+
+        private async void button_ol(object sender, RoutedEventArgs e)
+        {
+            using (new WaitCursor())
+            {
+                var url = ((MainWindow)Application.Current.MainWindow).WebApiTextbox.Text;
+                //var result = string.Empty;
+                var intellidactId = tbIntellidactId.Text;
+
+                if (string.IsNullOrWhiteSpace(intellidactId))
+                {
+                    NoticeTextbox.Text = "Please enter an Intellidact ID";
+                    return;
+                }
+
+                SetupWebClient(url, false, false);
+
+                try
+                {
+                    var sw = CallApiStart();
+                    var apiUrl = $"api/ai/OnlineLearning/{intellidactId}";
+                    HttpContent contentPost = new StringContent("", Encoding.UTF8, "application/json");
+                    
+                    Slog.ApiCall(client, apiUrl, "POST");
+                    HttpResponseMessage response = await client.PostAsync(apiUrl, null);
+                    var result = await response.Content.ReadAsStringAsync();
+                    CallApiEnd(sw);
+
+                    WebApiResponseLabel.Text = $"{sw.ElapsedMilliseconds} ms";
+                    NoticeTextbox.Text = result;
+
+                    Properties.Settings.Default.intellidactid = intellidactId;
+                    Properties.Settings.Default.Save();
+                }
+                catch (Exception ex)
+                {
+                    CallApiEnd();
+                    NoticeTextbox.Text = $"Error: {ex.Message}. \nPlease double check url, api Key and parameters";
+                }
+            }
+        }
     }
 }

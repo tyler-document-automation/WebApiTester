@@ -29,5 +29,8 @@
     <Setting Name="batch_status" Type="System.String" Scope="User">
       <Value Profile="(Default)">Any</Value>
     </Setting>
+    <Setting Name="intellidactid" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WebApiTester"
         mc:Ignorable="d"
-        Title="Intellidact Web API Tester" Icon="internet.png" WindowStartupLocation="CenterScreen" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="5" d:DesignWidth="1476.571" Width="1300" ScrollViewer.CanContentScroll="True" ResizeMode="CanMinimize" Height="666">
+        Title="Intellidact Web API Tester" Icon="internet.png" WindowStartupLocation="CenterScreen" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" Padding="5" d:DesignWidth="1476.571" Width="1300" ScrollViewer.CanContentScroll="True" ResizeMode="CanMinimize" Height="641">
     <Grid Margin="5" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
         <Grid.RowDefinitions>
             <RowDefinition Height = "100" />
@@ -85,7 +85,7 @@
                 </DockPanel>
             </Button>
         </StackPanel>
-        <StackPanel Grid.Column="0" Grid.Row="3" Margin="5,26,5,0" VerticalAlignment="Top" Height="143">
+        <StackPanel Grid.Column="0" Grid.Row="3" Margin="5,26,5,0" VerticalAlignment="Top" Height="143" HorizontalAlignment="Stretch">
             <DockPanel>
                 <Label DockPanel.Dock="Left">Reason (Required):</Label>
                 <TextBox x:Name ="RejectReasonTextbox" TextWrapping="Wrap" Text="" DockPanel.Dock="Right" Margin="0"/>
@@ -96,18 +96,28 @@
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Cancel Batch</TextBlock>
                 </DockPanel>
             </Button>
-            <Button VerticalAlignment="Top" Click="Button_ArchiveBatch" Width="110" Height="30" HorizontalAlignment="Left" Margin="0,10">
-                <DockPanel>
-                    <Image Source="delete.png" />
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Archive Batch</TextBlock>
-                </DockPanel>
-            </Button>
-            <Button HorizontalAlignment="Left" VerticalAlignment="Top" Width="110" Click="Button_Copy" Height="30" RenderTransformOrigin="0.72,2.85">
-                <DockPanel>
-                    <Image Source="copy.png" />
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Copy Result</TextBlock>
-                </DockPanel>
-            </Button>
+            <DockPanel Height="28" Width="276" HorizontalAlignment="Left">
+                <Button Click="Button_ArchiveBatch" Width="117">
+                    <DockPanel Width="100">
+                        <Image Source="delete.png" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"><Run Text="Archive Batch"/></TextBlock>
+                    </DockPanel>
+                </Button>
+                <Button Click="Button_Copy" Width="117" >
+                    <DockPanel>
+                        <Image Source="copy.png" />
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"><Run Text="Copy Result"/></TextBlock>
+                    </DockPanel>
+                </Button>
+            </DockPanel>
+            <DockPanel>
+                <TextBox x:Name ="tbIntellidactId" TextWrapping="Wrap" Text="" DockPanel.Dock="Left" Margin="0" Width="276" Height="24"/>
+                <Button Width="123" Height="30" RenderTransformOrigin="1,0.5" Click="button_ol">
+                    <DockPanel>
+                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Online Learning</TextBlock>
+                    </DockPanel>
+                </Button>
+            </DockPanel>
         </StackPanel>
         <StatusBar Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Height="27" VerticalAlignment="Bottom" >
             <StatusBar.ItemsPanel>
